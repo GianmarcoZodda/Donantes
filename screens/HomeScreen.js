@@ -1,8 +1,12 @@
-import React from 'react';
+import React,{useContext, useEffect}from 'react';
 import { View, Text, Button, StyleSheet, Image, FlatList } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
 
 const HomeScreen = ({ navigation }) => {
+  const { status,logout } = useContext(AuthContext);
+  // useEffect(( => {
 
+  // }))
     //creo un array de elementos. a algunos les agrego contenido (un titulo o parrafo) y los otros son para redirigir
 
   const data = [
@@ -13,7 +17,8 @@ const HomeScreen = ({ navigation }) => {
     { key: '5', title: 'Registrarme', action: () => navigation.navigate('Register') },
     { key: '8', title: 'Centros', action: () => navigation.navigate('Centros') },
     { key: '9', title: 'Ver Noticias', action: () => navigation.navigate('News') },
-
+    { key: '10', title: 'Logout', action: () => logout() },
+    { key: '11', title: status },
     //aca falta agregar a los donantes y medicos (index general). despues un edit, details,remove para c/u
   ];
 

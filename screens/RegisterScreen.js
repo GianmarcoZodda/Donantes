@@ -1,15 +1,21 @@
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
-import React, { useState } from 'react';
+import React, { useContext, useState, useEffect} from 'react';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
+
+export default function RegisterScreen( {} ) {
+
+    const { register } = useContext(AuthContext);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [name, setName] = useState('');
+    const [lastName, setLastName] = useState('')
+    const navigation = useNavigation()
 
 
-export default function RegisterScreen( {navigation} ) {
 
-
-    const [email, setEmail] = useState(' ');
-    const [password, setPassword] = useState(' ');
-
-
-    const handleRegister = () => {
+    const handleRegister = async () => {
         //aca vamos a poner la logica para el registro (validaciones y otras cosas)
         
         //si algo sale mal
@@ -20,10 +26,30 @@ export default function RegisterScreen( {navigation} ) {
 
         //si sale todo bien, el usuario queda registrado (agregar logica)
         //y lo dirigimos al edit de su perfil para que agreguetodos sus datos
-        navigation.navigate('Edit');
-
+        if (validateInputs(name, lastName, email, password, confirmPassword)) {
+          const userData = { name, lastName, email, password }
+          try {
+            if(await register(userData)){
+              navigation.navigate('Home');
+            }
+        } catch (error) {
+            console.log(error);
+            alert('Error al registrar el usuario');
+        }
     }
+      };
 
+      const validateInputs = (name, lastName, email, password, confirmPassword) => {
+        if (!name || !lastName || !email || !password || !confirmPassword) {
+            alert('Por favor, completa todos los campos');
+            return false;
+        }
+        if (password !== confirmPassword) {
+            alert('La contraseña no coincide');
+            return false;
+        }
+        return true;
+    }
 
   return (
     <View style={styles.container}>
@@ -36,14 +62,33 @@ export default function RegisterScreen( {navigation} ) {
     />
     <TextInput
       style={styles.input}
+      placeholder="Nombre"
+      value={name}
+      onChangeText={setName}
+    />
+    <TextInput
+      style={styles.input}
+      placeholder="Apellido"
+      value={lastName}
+      onChangeText={setLastName}
+    />
+    <TextInput
+      style={styles.input}
       placeholder="Password"
       value={password}
       onChangeText={setPassword}
+    />
+    <TextInput
+      style={styles.input}
+      placeholder="Confirm Password"
+      value={confirmPassword}
+      onChangeText={setConfirmPassword}
     />
     <Button title="Registrarme" onPress={handleRegister} />
   </View>
   )
 }
+
 
 
 const styles = StyleSheet.create({

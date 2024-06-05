@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
 
-const LoginScreen = ({ navigation }) => {
+  const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { status,login } = useContext(AuthContext);
 
   const handleLogin = () => {
   //aca va la logica del inicio de sesion
@@ -12,14 +14,14 @@ const LoginScreen = ({ navigation }) => {
     //2) traermelo y chequear las password
 
     //caso a, datos incorrectos o no existe user: (ejemplo basico)
-
-    if(email != "paciente1" && password != "Password1!"){
-        alert('Datos Incorrectos')
+    if(status == 'authenticated'){
+      alert("Ya esta autenticado")
+    }else{
+      if(login(email,password)){
+        navigation.navigate('Home');
+      }
     }
-
     //caso b, existe el user y la password es correcta
-
-    navigation.navigate('Home'); 
 
   };
 
