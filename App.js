@@ -5,6 +5,7 @@ import RegisterScreen from './screens/RegisterScreen';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import { AuthProvider } from './context/AuthContext';
+import PerfilScreen from './screens/PerfilScreen';
 
 
 
@@ -18,6 +19,7 @@ export default function App() {
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Profile" component={PerfilScreen} />
     </Stack.Navigator>
   </NavigationContainer>
   </AuthProvider>

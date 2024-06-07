@@ -7,7 +7,8 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 
     const [status, setStatus] = useState('checking');
-// Utilizamos este useEffect para estar si hay algun cambio en el estado
+    const [userData, setDataUser] = useState(null);
+// Utilizamos este useEffect para setear si hay algun cambio en el estado
  useEffect(() => {
         const cargarEstadoAuth = async () => {
             const isAuthenticated = await AsyncStorage.getItem('isAuthenticated')
@@ -19,36 +20,49 @@ export const AuthProvider = ({ children }) => {
             }
 
         }
-
+        const persistData = async() => {
+            const persist = await AsyncStorage.getItem('user')
+            if(persist != null){
+               const jsonPersist =  JSON.parse(persist)
+                // console.log("persist",persist)
+                // console.log("jsonPersist",jsonPersist)
+                // console.log("name",jsonPersist.name)
+                setDataUser(jsonPersist)
+            }
+        }
+        persistData()
         cargarEstadoAuth()
     }, [])
 
     const login = async (email, password) => {
-
+        let resultado = false
         try {
             // Hacemos el fetch y nos traemos todos los usuarios para validar si el usuario ya esta registrado 
+            if(validarDatosUsuario(email,password)){
             const respuesta = await fetch('https://665b5468003609eda4609543.mockapi.io/people');
             const users = await respuesta.json()
             const user = users.find( element => element.email === email && element.password === password)
             //Si se encuentra al usuario guardamos el cambio en el storage y actualizamos el status
             if (user){
                 await AsyncStorage.setItem('isAuthenticated', 'true')
+                await AsyncStorage.setItem('user', JSON.stringify(user))
                 setStatus('authenticated')
                 alert("Sesion iniciada")
-                return true
+                resultado = true
             }else{
-                alert('Error en login else')
+                alert('Error en login')
                 setStatus('unauthenticated')
-                return false
+                resultado = false
             }
-            
+        }
+        return resultado
         } catch (error) {
             console.error('Error en el fetch: ', error)
             alert('Error en login catch')
         }
     }
-
     const register = async (userData) => {
+        let resultado = false
         try {
             //validamos los datos pasados por parametro
             if (validarDatosUsuario(userData.email, userData.password)) {
@@ -64,14 +78,15 @@ export const AuthProvider = ({ children }) => {
                     body: JSON.stringify(userData),
                 })
                 if (response.ok) {  
-                    return true;
+                    resultado = true;
                 } else {
                     alert('Error al registrar el usuario');
-                    return false;
+                    resultado = false;
                 }
                 }else{alert("Ya existe una cuenta con este email")}} else {
-                return false
+                    resultado = false
             }
+            return resultado
         } catch (error) {
             console.log(error);
             alert('Error al registrar el usuario');
@@ -95,7 +110,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ status, login, register, logout}}>
+        <AuthContext.Provider value={{ userData,status, login, register, logout}}>
             { children }
         </AuthContext.Provider>
      )
