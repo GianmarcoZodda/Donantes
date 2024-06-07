@@ -8,8 +8,8 @@ export const AuthProvider = ({ children }) => {
 
     const [status, setStatus] = useState('checking');
     const [userData, setDataUser] = useState(null);
-// Utilizamos este useEffect para setear si hay algun cambio en el estado
  useEffect(() => {
+    // Utilizamos este useEffect para setear si hay algun cambio en el estado
         const cargarEstadoAuth = async () => {
             const isAuthenticated = await AsyncStorage.getItem('isAuthenticated')
 
@@ -20,13 +20,13 @@ export const AuthProvider = ({ children }) => {
             }
 
         }
+    /* Chequeamos que la info del user este actualizada y parseamos el value del storage para poder utilizarlo,
+    seteamos el objeto a los datos del user asi usarlo en cualquier parte de la app */
+    // - No se si esto podria ser comprometedor en terminos de seguridad - Chequear con el profe
         const persistData = async() => {
             const persist = await AsyncStorage.getItem('user')
             if(persist != null){
                const jsonPersist =  JSON.parse(persist)
-                // console.log("persist",persist)
-                // console.log("jsonPersist",jsonPersist)
-                // console.log("name",jsonPersist.name)
                 setDataUser(jsonPersist)
             }
         }
@@ -42,11 +42,12 @@ export const AuthProvider = ({ children }) => {
             const respuesta = await fetch('https://665b5468003609eda4609543.mockapi.io/people');
             const users = await respuesta.json()
             const user = users.find( element => element.email === email && element.password === password)
-            //Si se encuentra al usuario guardamos el cambio en el storage y actualizamos el status
             if (user){
+            //Seteamos el cambio en el storage y actualizamos el status
                 await AsyncStorage.setItem('isAuthenticated', 'true')
-                await AsyncStorage.setItem('user', JSON.stringify(user))
                 setStatus('authenticated')
+            // Seteamos el item user con el value JSON.stringify(user)), esto para guardar todos los datos
+                await AsyncStorage.setItem('user', JSON.stringify(user))
                 alert("Sesion iniciada")
                 resultado = true
             }else{
@@ -107,6 +108,8 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         await AsyncStorage.removeItem('isAuthenticated');
         setStatus('unauthenticated')
+        await AsyncStorage.removeItem('user');
+        setDataUser(null)
     }
 
     return (
