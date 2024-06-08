@@ -16,16 +16,6 @@ export default function RegisterScreen( {} ) {
 
 
     const handleRegister = async () => {
-        //aca vamos a poner la logica para el registro (validaciones y otras cosas)
-        
-        //si algo sale mal
-
-        //if( sale mal ){
-            //alert("algo malio sal");
-        //}
-
-        //si sale todo bien, el usuario queda registrado (agregar logica)
-        //y lo dirigimos al edit de su perfil para que agreguetodos sus datos
         if (validateInputs(name, lastName, email, password, confirmPassword)) {
           const userData = { name, lastName, email, password }
           try {

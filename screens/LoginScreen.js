@@ -8,12 +8,6 @@ import { AuthContext } from '../context/AuthContext';
   const { status,login } = useContext(AuthContext);
 
   const handleLogin = () => {
-  //aca va la logica del inicio de sesion
-
-    //1) ir a la bd y consultar x algun user con ese mail
-    //2) traermelo y chequear las password
-
-    //caso a, datos incorrectos o no existe user: (ejemplo basico)
     if(status == 'authenticated'){
       alert("Ya esta autenticado")
     }else{
@@ -21,8 +15,6 @@ import { AuthContext } from '../context/AuthContext';
         navigation.navigate('Home');
       }
     }
-    //caso b, existe el user y la password es correcta
-
   };
 
   return (

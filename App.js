@@ -6,7 +6,10 @@ import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import { AuthProvider } from './context/AuthContext';
 import PerfilScreen from './screens/PerfilScreen';
-
+import { CentroProvider } from './context/CentroContext';
+import AddCentroScreen from './screens/AddCentroScreen';
+import IndexCentroScreen from './screens/IndexCentroScreen';
+//import NewsScreen from './screens/NewsScreen'; 
 
 
 const Stack = createStackNavigator();
@@ -14,14 +17,19 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <AuthProvider>
+    <CentroProvider>
     <NavigationContainer>
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Profile" component={PerfilScreen} />
+      <Stack.Screen name="AddCentro" component={AddCentroScreen} />
+      <Stack.Screen name="IndexCentro" component={IndexCentroScreen} />
+      
     </Stack.Navigator>
   </NavigationContainer>
+  </CentroProvider>
   </AuthProvider>
   );
 }
