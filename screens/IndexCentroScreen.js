@@ -27,6 +27,13 @@ const IndexCentroScreen = () => {
   }
 
   const renderItem = ({ item }) => (
+    //con touchableopacity, hacer que al clickear la foto o mismo algun atributo, me rediriga a details de ese cvonsultorio
+    //seleccionado y, desde esa screen de detalle, agregar un boton para ir a la screen de edicion y otro para eliminar el consultorio
+    // (debemos hacer lo mismo con los usuarios y algo similar con los turnos)
+
+    // <TouchableOpacity onPress={ () => navigation.navigate("DetailsCentroScreen", {centro: item} )}>
+    //contenido para clickear
+    //</TouchableOpacity>
     <View style={styles.row}>
       <Text style={styles.cell}>{item.id}</Text>
       <Text style={styles.cell}>{item.nombre}</Text>
