@@ -5,7 +5,9 @@ import RegisterScreen from './screens/RegisterScreen';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import { AuthProvider } from './context/AuthContext';
+import { UserProvider } from './context/UserContext';
 import PerfilScreen from './screens/PerfilScreen';
+
 
 
 
@@ -14,6 +16,7 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <AuthProvider>
+      <UserProvider>
     <NavigationContainer>
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen name="Register" component={RegisterScreen} />
@@ -22,6 +25,7 @@ export default function App() {
       <Stack.Screen name="Profile" component={PerfilScreen} />
     </Stack.Navigator>
   </NavigationContainer>
+  </UserProvider>
   </AuthProvider>
   );
 }

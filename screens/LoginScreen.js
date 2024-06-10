@@ -22,7 +22,6 @@ import { AuthContext } from '../context/AuthContext';
       }
     }
     //caso b, existe el user y la password es correcta
-
   };
 
   return (
