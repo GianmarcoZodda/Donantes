@@ -1,9 +1,11 @@
 import React,{useContext, useEffect}from 'react';
 import { View, Text, Button, StyleSheet, Image, FlatList } from 'react-native';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContext.js';
+//import { CentroContext } from '../context/CentroContext.js';
 
 const HomeScreen = ({ navigation }) => {
   const { status,logout } = useContext(AuthContext);
+  //const { addCentro, centros } = useContext(CentroContext);
   // useEffect(( => {
 
   // }))
@@ -15,10 +17,11 @@ const HomeScreen = ({ navigation }) => {
     { key: '3', title: 'Perfil', action: () => navigation.navigate('Profile') },
     { key: '4', title: 'Iniciar Sesión', action: () => navigation.navigate('Login') },
     { key: '5', title: 'Registrarme', action: () => navigation.navigate('Register') },
-    { key: '8', title: 'Centros', action: () => navigation.navigate('Centros') },
-    { key: '9', title: 'Ver Noticias', action: () => navigation.navigate('News') },
-    { key: '10', title: 'Logout', action: () => logout() },
-    { key: '11', title: status },
+    { key: '6', title: 'Ver Centros', action: () => navigation.navigate('IndexCentro') },
+    { key: '7', title: 'Ver Noticias', action: () => navigation.navigate('News') },
+    { key: '8', title: 'Cerrar Sesion ', action: () => logout() },
+    { key: '9', title: status }, 
+    
     //aca falta agregar a los donantes y medicos (index general). despues un edit, details,remove para c/u
   ];
 
