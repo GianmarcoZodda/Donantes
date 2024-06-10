@@ -4,11 +4,11 @@ import RegisterScreen from "./screens/RegisterScreen";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import { AuthProvider } from "./context/AuthContext";
-import { UserProvider } from "./context/UserContext";
 import PerfilScreen from "./screens/PerfilScreen";
 import { CentroProvider } from "./context/CentroContext";
 import AddCentroScreen from "./screens/AddCentroScreen";
 import IndexCentroScreen from "./screens/IndexCentroScreen";
+import { UserProvider } from "./context/UserContext";
 //import NewsScreen from './screens/NewsScreen';
 
 const Stack = createStackNavigator();
