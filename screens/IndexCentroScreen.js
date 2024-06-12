@@ -22,12 +22,13 @@ const IndexCentroScreen = () => {
     fetchCentros();
   }, []);
 
-  const AgregarCentro = () => {
-    navigation.navigate("AddCentro");
+  const HandleNavigation = (viewName, id) => {
+    navigation.navigate(viewName, id);
   }
 
+
   const renderItem = ({ item }) => (
-    //con touchableopacity, hacer que al clickear la foto o mismo algun atributo, me rediriga a details de ese cvonsultorio
+     //con touchableopacity, hacer que al clickear la foto o mismo algun atributo, me rediriga a details de ese cvonsultorio
     //seleccionado y, desde esa screen de detalle, agregar un boton para ir a la screen de edicion y otro para eliminar el consultorio
     // (debemos hacer lo mismo con los usuarios y algo similar con los turnos)
 
@@ -35,22 +36,26 @@ const IndexCentroScreen = () => {
     //contenido para clickear
     //</TouchableOpacity>
     <View style={styles.row}>
-      <Text style={styles.cell}>{item.id}</Text>
-      <Text style={styles.cell}>{item.nombre}</Text>
+      {/* <Text style={styles.cell}>{item.id}</Text> */}
       <Text style={styles.cell}>{item.direccion}</Text>
-      <Text style={styles.cell}>{item.telefonoConsultas}</Text>
+      <Text style={styles.cell}>{item.nombre}</Text> 
+      {/* <Text style={styles.cell}>{item.telefonoConsultas}</Text> */}
+      <Button title="Editar" onPress={() => HandleNavigation("EditCentro", item.id)}></Button>  
+      <Button title="Detalles" onPress={() => HandleNavigation("DetailsCentro", item.id)}></Button>  
+      <Button title="Eliminar" onPress={() => HandleNavigation("DeleteCentro", item.id)}></Button>
     </View>
   );
+  
 
   return (
    
     <View style={styles.container}>
-        <Button title="Agregar Centro" onPress={AgregarCentro} />
+        <Button title="Agregar Centro" onPress={() => HandleNavigation("AddCentro")} />
       <View style={styles.header}>
-        <Text style={styles.headerText}>ID</Text>
+        {/* <Text style={styles.headerText}>ID</Text> */}
         <Text style={styles.headerText}>Nombre del Centro</Text>
         <Text style={styles.headerText}>Direccion</Text>
-        <Text style={styles.headerText}>Telefono de Consultas</Text>
+        {/* <Text style={styles.headerText}>Telefono de Consultas</Text> */}
       </View>
       <FlatList
         data={centros}
