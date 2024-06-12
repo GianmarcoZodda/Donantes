@@ -48,6 +48,7 @@ export const AuthProvider = ({ children }) => {
                 setStatus('authenticated')
             // Seteamos el item user con el value JSON.stringify(user)), esto para guardar todos los datos
                 await AsyncStorage.setItem('user', JSON.stringify(user))
+                setDataUser(user)
                 alert("Sesion iniciada")
                 resultado = true
             }else{
