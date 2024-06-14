@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect  } from 'react';
 
 // Crear el contexto
 export const CentroContext = createContext();
@@ -14,18 +14,18 @@ const API_URL = 'https://666388ee932baf9032a87188.mockapi.io/api/v1/centros/cent
 export const CentroProvider = ({ children }) => {
   const [centros, setCentros] = useState([]);
 
+  const fetchCentros = async () => {
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      setCentros(data);
+    } catch (error) {
+      console.error('Error al obtener los centros:', error);
+    }
+  };
+
   // Obtener los centros almacenados al cargar el componente
   useEffect(() => {
-    const fetchCentros = async () => {
-      try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
-        setCentros(data);
-      } catch (error) {
-        console.error('Error al obtener los centros:', error);
-      }
-    };
-
     fetchCentros();
   }, []);
 
@@ -33,7 +33,8 @@ export const CentroProvider = ({ children }) => {
   const addCentro = async (newCentro) => {
     let result = false;
     try {
-        if (validateCenter(newCentro)) {
+      const {nombre, email, telefonoConsultas, telefonoEmergencias} = newCentro;
+        if (validateCenter({nombre, email, telefonoConsultas, telefonoEmergencias})) {
             const res = await fetch(API_URL, {
                 method: 'POST',
                 headers: {
@@ -62,13 +63,23 @@ export const CentroProvider = ({ children }) => {
     return result;
 }
 
+//funcion a utilizar por las vistas del centro. valida que lo que ingresa el usuario no sea nulo
+const validateInputs = (nombre, direccion, email, telefonoConsultas, telefonoEmergencias) => {
+  let result = true;
+  if (!nombre || !direccion || !email || !telefonoConsultas || !telefonoEmergencias) {
+      alert('Por favor, completa todos los campos');
+      result = false;
+  }
+  return result;
+}
+
 
 
 
 //funcion para validar los datos ingresados por el cliente
 
-const validateCenter = (newCentre) => {
-    const {nombre, email, telefonoConsultas, telefonoEmergencias} = newCentre;
+const validateCenter = ({nombre, email, telefonoConsultas, telefonoEmergencias}) => {
+    //const {nombre, email, telefonoConsultas, telefonoEmergencias} = newCentre;
     let result = false;
 
         const isNombreValido = validateName(nombre);
@@ -111,10 +122,65 @@ const validatePhone = (telefono) => {
 }
 
 
+const editCentro = async (id, updatedCentro) => {
+  const { nombre, email, telefonoConsultas, telefonoEmergencias } = updatedCentro;
+
+  if (validateCenter({ nombre, email, telefonoConsultas, telefonoEmergencias })) {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedCentro),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        // Actualizar el estado de centros después de la edición
+        setCentros((prevCentros) =>
+          prevCentros.map((centro) => (centro.id === id ? data : centro))
+        );
+        console.log('Centro editado correctamente:', data);
+        alert('Centro editado correctamente');
+      } else {
+        // mostrar un mensaje de error
+        alert('Error editando el centro');
+      }
+    } catch (error) {
+      console.error('Error editando el centro:', error);
+      alert('Error editando el centro');
+    }
+  } else {
+    // Si los datos no son validos....
+    alert('Datos del centro inválidos');
+  }
+};
+
+
+const deleteCentro = async (id) => {
+  try {
+    const res = await fetch(`${API_URL}/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (res.ok) {
+      setCentros(prevCentros => prevCentros.filter(centro => centro.id !== id));
+      alert('Centro eliminado correctamente');
+    } else {
+      alert('Error eliminando el centro');
+    }
+  } catch (error) {
+    console.error('Error eliminando el centro:', error);
+    alert('Error eliminando el centro');
+  }
+};
+
+
 
   // Proveer el estado y las funciones a los componentes hijos
   return (
-    <CentroContext.Provider value={{ centros, addCentro }}>
+    <CentroContext.Provider value={{ centros, addCentro, validateInputs, editCentro, fetchCentros, deleteCentro }}>
       {children}
     </CentroContext.Provider>
   );

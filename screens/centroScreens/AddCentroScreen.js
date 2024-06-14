@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { StyleSheet, View, Button, TextInput } from 'react-native';
 import React, { useContext, useState, useEffect} from 'react';
-import { CentroContext } from '../context/CentroContext';
+import { CentroContext } from '../../context/CentroContext';
 import { useNavigation } from '@react-navigation/native';
 
 const AddCentroScreen = ({  }) => {
@@ -9,7 +9,7 @@ const AddCentroScreen = ({  }) => {
   const [telefonoConsultas, setTelefonoConsultas] = useState('');
   const [telefonoEmergencias, setTelefonoEmergencias] = useState('');
   const [email, setEmail] = useState('');
-  const { addCentro } = useContext(CentroContext);
+  const { addCentro, validateInputs } = useContext(CentroContext);
   const navigation = useNavigation()
 
   const handleAddCentro = async() => {
@@ -35,15 +35,6 @@ const AddCentroScreen = ({  }) => {
     }
    
   };
-
-  const validateInputs = (nombre, direccion, email, telefonoConsultas, telefonoEmergencias) => {
-    let result = true;
-    if (!nombre || !direccion || !email || !telefonoConsultas || !telefonoEmergencias) {
-        alert('Por favor, completa todos los campos');
-        result = false;
-    }
-    return result;
-}
   
 
   return (
