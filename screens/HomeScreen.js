@@ -24,6 +24,13 @@ const HomeScreen = ({ navigation }) => {
     
     //aca falta agregar a los donantes y medicos (index general). despues un edit, details,remove para c/u
   ];
+  const filteredData = data.filter(item => {
+    if (status === 'unauthenticated') {
+      return item.key !== '3' && item.key !== '8';
+    } else {
+      return item.key !== '4' && item.key !== '5';
+    }
+  });
 
 //a esta funcion le llega un item (elemento de data)
   const renderItem = ({ item }) => {
@@ -63,7 +70,7 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.title}>¡Dona Sangre, Salva Vidas!</Text>
         </View>
       }
-      data={data}
+      data={filteredData}
       renderItem={renderItem}
       keyExtractor={item => item.key}
     />

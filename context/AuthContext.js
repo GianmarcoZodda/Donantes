@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
         }
         persistData()
         cargarEstadoAuth()
-    }, [])
+    }, [status,])
 
     const login = async (email, password) => {
         let resultado = false
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
                 setStatus('authenticated')
             // Seteamos el item user con el value JSON.stringify(user)), esto para guardar todos los datos
                 await AsyncStorage.setItem('user', JSON.stringify(user))
-                setDataUser(user)
+                setDataUser(JSON.stringify(user))
                 alert("Sesion iniciada")
                 resultado = true
             }else{
@@ -114,7 +114,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ userData,status, login, register, logout}}>
+        <AuthContext.Provider value={{ userData,setDataUser,status, login, register, logout}}>
             { children }
         </AuthContext.Provider>
      )

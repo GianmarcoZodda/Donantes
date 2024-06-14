@@ -4,23 +4,16 @@ import { UserContext } from '../context/UserContext';
 import UserProfile from '../components/UserProfile';
 import { View, StyleSheet,Text,Button } from 'react-native';
 import ModalProfileUpdate from '../components/ModalProfileUpdate';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function PerfilScreen({}) {
 const {userData} = useContext(AuthContext);
 const [modalVisible, setModalVisible] = useState(false);
 const {updateUser} = useContext(UserContext);
-const [additionalData, setAdditionalData] = useState({
-  address: '',
-  phone: '',
-  birthDate: '',
-  bloodType: ''
-});
 
-
+//Enviamos los datos del modal al userContext para que maneje la logica y validaciones
 const handleSave = async (data) => {
-  console.log(data)
   updateUser(data)
-  setAdditionalData(data);
 }
 return (
     <View style={styles.container}>
