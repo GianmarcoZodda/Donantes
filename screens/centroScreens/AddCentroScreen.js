@@ -1,5 +1,5 @@
 import { StyleSheet, View, Button, TextInput } from 'react-native';
-import React, { useContext, useState, useEffect} from 'react';
+import React, { useContext, useState} from 'react';
 import { CentroContext } from '../../context/CentroContext';
 import { useNavigation } from '@react-navigation/native';
 
@@ -9,12 +9,11 @@ const AddCentroScreen = ({  }) => {
   const [telefonoConsultas, setTelefonoConsultas] = useState('');
   const [telefonoEmergencias, setTelefonoEmergencias] = useState('');
   const [email, setEmail] = useState('');
-  const { addCentro, validateInputs } = useContext(CentroContext);
+  const { addCentro } = useContext(CentroContext);
   const navigation = useNavigation()
 
   const handleAddCentro = async() => {
     // valido que los parametros que me llegan no sean nulos. despues, el contexto se encarga de validar su formato y agregarlo a bd
-    if(validateInputs(nombre, direccion, email, telefonoConsultas, telefonoEmergencias)){
         try{
             const nuevoCentro = {
                 nombre,
@@ -24,16 +23,19 @@ const AddCentroScreen = ({  }) => {
                 email,
               };
               if(await addCentro(nuevoCentro)){
+                console.log("centro agregado correctamente")
                 alert("centro agregado correctamente")
                 navigation.navigate('Home');
+              }else{
+                console.log("error agregando el centro")
+                alert("error agregando el centro")
               }
         }
         catch(error){
             console.log(error)
             alert("error creando el centro")
+            console.log("error creando el centro")
         }
-    }
-   
   };
   
 

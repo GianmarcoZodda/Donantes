@@ -13,7 +13,7 @@ const HomeScreen = ({ navigation }) => {
     { key: '3', title: 'Perfil', action: () => navigation.navigate('Profile'), showIfAuthenticated: true },
     { key: '4', title: 'Iniciar Sesión', action: () => navigation.navigate('Login'), showIfAuthenticated: false },
     { key: '5', title: 'Registrarme', action: () => navigation.navigate('Register'), showIfAuthenticated: false },
-    { key: '6', title: 'Ver Centros', action: () => navigation.navigate('IndexCentro'), showIfAuthenticated: true },
+    { key: '6', title: 'Ver Centros', action: () => navigation.navigate('CentroStack'), showIfAuthenticated: true },
     { key: '7', title: 'Ver Noticias', action: () => navigation.navigate('News') },
     { key: '8', title: 'Cerrar Sesion ', action: () => logout(), showIfAuthenticated: true },
     //{ key: '9', title: status }, 

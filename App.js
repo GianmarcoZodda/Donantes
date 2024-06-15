@@ -17,9 +17,10 @@ import { UserProvider } from "./context/UserContext";
 const Stack = createStackNavigator();
 
 //existe para hacer mas prolijo el app
+//screen options le saca el header
 function CentroStack() {
   return (
-    <Stack.Navigator initialRouteName="IndexCentro">
+    <Stack.Navigator initialRouteName="IndexCentro" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="AddCentro" component={AddCentroScreen} />
       <Stack.Screen name="IndexCentro" component={IndexCentroScreen} />
       <Stack.Screen name="DetailsCentro" component={DetailsCentroScreen} />
@@ -41,7 +42,7 @@ export default function App() {
               <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Profile" component={PerfilScreen} />
-              <Stack.Screen name="CentroStack" component={CentroStack} options={{ headerShown: false }} />
+              <Stack.Screen name="CentroStack" component={CentroStack} />
             </Stack.Navigator>
           </NavigationContainer>
         </UserProvider>
