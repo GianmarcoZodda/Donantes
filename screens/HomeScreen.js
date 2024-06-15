@@ -1,35 +1,31 @@
-import React,{useContext, useEffect}from 'react';
+import React,{useContext}from 'react';
 import { View, Text, Button, StyleSheet, Image, FlatList } from 'react-native';
 import { AuthContext } from '../context/AuthContext.js';
 
 const HomeScreen = ({ navigation }) => {
   const { status,logout } = useContext(AuthContext);
-
+  const isAuthenticated = status === "authenticated";
     //creo un array de elementos. a algunos les agrego contenido (un titulo o parrafo) y los otros son para redirigir
 
   const data = [
     { key: '1', title: '¿Por qué donar sangre?', content: 'Donar sangre es un acto altruista que puede salvar muchas vidas. Cada donación puede ayudar hasta a tres personas en situaciones de emergencia, cirugías y tratamientos de enfermedades crónicas.' },
     { key: '2', title: 'Estadísticas de Donantes', content: 'En el mundo, millones de personas necesitan transfusiones de sangre cada año. Ayuda a aumentar el número de donantes y a salvar vidas.' },
-    { key: '3', title: 'Perfil', action: () => navigation.navigate('Profile') },
-    { key: '4', title: 'Iniciar Sesión', action: () => navigation.navigate('Login') },
-    { key: '5', title: 'Registrarme', action: () => navigation.navigate('Register') },
-    { key: '6', title: 'Ver Centros', action: () => navigation.navigate('IndexCentro') },
+    { key: '3', title: 'Perfil', action: () => navigation.navigate('Profile'), showIfAuthenticated: true },
+    { key: '4', title: 'Iniciar Sesión', action: () => navigation.navigate('Login'), showIfAuthenticated: false },
+    { key: '5', title: 'Registrarme', action: () => navigation.navigate('Register'), showIfAuthenticated: false },
+    { key: '6', title: 'Ver Centros', action: () => navigation.navigate('IndexCentro'), showIfAuthenticated: true },
     { key: '7', title: 'Ver Noticias', action: () => navigation.navigate('News') },
-    { key: '8', title: 'Cerrar Sesion ', action: () => logout() },
-    { key: '9', title: status }, 
-    
-    //aca falta agregar a los donantes y medicos (index general). despues un edit, details,remove para c/u
+    { key: '8', title: 'Cerrar Sesion ', action: () => logout(), showIfAuthenticated: true },
+    //{ key: '9', title: status }, 
   ];
-  const filteredData = data.filter(item => {
-    if (status === 'unauthenticated') {
-      return item.key !== '3' && item.key !== '8';
-    } else {
-      return item.key !== '4' && item.key !== '5';
-    }
-  });
+
 
 //a esta funcion le llega un item (elemento de data)
   const renderItem = ({ item }) => {
+
+    if (item.showIfAuthenticated !== undefined && item.showIfAuthenticated !== isAuthenticated) {
+      return null;
+    }
 
     //si el item tiene contenido, lo muestra con los estilos para los titulos, parrafos etc
     if (item.content) {
@@ -66,7 +62,7 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.title}>¡Dona Sangre, Salva Vidas!</Text>
         </View>
       }
-      data={filteredData}
+      data={data}
       renderItem={renderItem}
       keyExtractor={item => item.key}
     />

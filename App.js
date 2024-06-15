@@ -16,6 +16,20 @@ import { UserProvider } from "./context/UserContext";
 
 const Stack = createStackNavigator();
 
+//existe para hacer mas prolijo el app
+function CentroStack() {
+  return (
+    <Stack.Navigator initialRouteName="IndexCentro">
+      <Stack.Screen name="AddCentro" component={AddCentroScreen} />
+      <Stack.Screen name="IndexCentro" component={IndexCentroScreen} />
+      <Stack.Screen name="DetailsCentro" component={DetailsCentroScreen} />
+      <Stack.Screen name="EditCentro" component={EditCentroScreen} />
+      <Stack.Screen name="DeleteCentro" component={DeleteCentroScreen} />
+    </Stack.Navigator>
+  );
+}
+
+//headershown false oculta el texto superior que aparece en la pantalla
 export default function App() {
   return (
     <AuthProvider>
@@ -27,11 +41,7 @@ export default function App() {
               <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Profile" component={PerfilScreen} />
-              <Stack.Screen name="AddCentro" component={AddCentroScreen} />
-              <Stack.Screen name="IndexCentro" component={IndexCentroScreen} />
-              <Stack.Screen name="DetailsCentro" component={DetailsCentroScreen} />
-              <Stack.Screen name="EditCentro" component={EditCentroScreen} />
-              <Stack.Screen name="DeleteCentro" component={DeleteCentroScreen} />
+              <Stack.Screen name="CentroStack" component={CentroStack} options={{ headerShown: false }} />
             </Stack.Navigator>
           </NavigationContainer>
         </UserProvider>
