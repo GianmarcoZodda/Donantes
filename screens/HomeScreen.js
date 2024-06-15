@@ -1,14 +1,10 @@
 import React,{useContext, useEffect}from 'react';
 import { View, Text, Button, StyleSheet, Image, FlatList } from 'react-native';
 import { AuthContext } from '../context/AuthContext.js';
-//import { CentroContext } from '../context/CentroContext.js';
 
 const HomeScreen = ({ navigation }) => {
   const { status,logout } = useContext(AuthContext);
-  //const { addCentro, centros } = useContext(CentroContext);
-  // useEffect(( => {
 
-  // }))
     //creo un array de elementos. a algunos les agrego contenido (un titulo o parrafo) y los otros son para redirigir
 
   const data = [
