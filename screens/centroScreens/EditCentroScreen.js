@@ -17,24 +17,24 @@ const EditCentroScreeen = () => {
 
   const navigation = useNavigation()
 
-  const { editCentro, validateInputs } = useContext(CentroContext);
+  const { editCentro } = useContext(CentroContext);
 
   const handleEditCentro = async () => {
-    if (validateInputs(nombre, direccion, email, telefonoConsultas, telefonoEmergencias)) {
+   
       try {
-          const updatedCentro = { nombre, direccion, telefonoConsultas, telefonoEmergencias, email };
-          await editCentro(centro.id, updatedCentro);
-          alert('Centro editado correctamente');
+          const centroedit = {id: centro.id, nombre, direccion, telefonoConsultas, telefonoEmergencias, email };
+
+          let result = await editCentro(centroedit)
+
+          if(result){
           navigation.navigate("Home");
-          alert("centro editado")
+          }
+                    
       } catch (error) {
-          alert('Error editando el centro');
-          console.log('Error: ', error);
+          console.error('Error: ', error);
       }
-  } else {
-      Alert.alert('Datos inválidos');
-  }
     }
+    
 
   return (
     <View style={styles.container}>

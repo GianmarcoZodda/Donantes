@@ -5,6 +5,7 @@ import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import { AuthProvider } from "./context/AuthContext";
 import PerfilScreen from "./screens/PerfilScreen";
+import DonarScreen from "./screens/DonarScreen";
 import { CentroProvider } from "./context/CentroContext";
 import AddCentroScreen from "./screens/centroScreens/AddCentroScreen";
 import IndexCentroScreen from "./screens/centroScreens/IndexCentroScreen";
@@ -38,11 +39,12 @@ export default function App() {
         <UserProvider>
           <NavigationContainer>
             <Stack.Navigator initialRouteName="Home">
+            <Stack.Screen name="Donar" component={DonarScreen} />
               <Stack.Screen name="Register" component={RegisterScreen} />
               <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Profile" component={PerfilScreen} />
-              <Stack.Screen name="CentroStack" component={CentroStack} />
+              <Stack.Screen name="CentroStack" component={CentroStack} options={{ headerShown: false }}/>
             </Stack.Navigator>
           </NavigationContainer>
         </UserProvider>

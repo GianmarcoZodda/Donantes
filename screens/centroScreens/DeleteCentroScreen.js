@@ -4,18 +4,19 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { CentroContext } from '../../context/CentroContext';
 
 const DeleteCentroScreen = () => {
-    const { centros, deleteCentro } = useContext(CentroContext);
+    const { deleteCentro } = useContext(CentroContext);
     const navigation = useNavigation();
     const route = useRoute();
     const { centro } = route.params;
 
     const handleDelete = async () => {
         try {
-            await deleteCentro(centro.id);
-            navigation.navigate("Home");
+            let result = await deleteCentro(centro.id);
+            if(result){
+                navigation.navigate("Home");
+            }   
         } catch (error) {
-            console.error('Error al eliminar el centro:', error);
-            Alert.alert('Error', 'Error al eliminar el centro');
+            console.error('Error: ', error);
         }
     };
 

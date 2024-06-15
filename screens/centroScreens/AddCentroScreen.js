@@ -22,19 +22,14 @@ const AddCentroScreen = ({  }) => {
                 telefonoEmergencias,
                 email,
               };
-              if(await addCentro(nuevoCentro)){
-                console.log("centro agregado correctamente")
-                alert("centro agregado correctamente")
+
+              let result = await addCentro(nuevoCentro);
+              if(result){
                 navigation.navigate('Home');
-              }else{
-                console.log("error agregando el centro")
-                alert("error agregando el centro")
               }
         }
         catch(error){
-            console.log(error)
-            alert("error creando el centro")
-            console.log("error creando el centro")
+            console.error(error)
         }
   };
   
