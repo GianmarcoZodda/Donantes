@@ -4,17 +4,32 @@ import { UserContext } from '../context/UserContext';
 import UserProfile from '../components/UserProfile';
 import { View, StyleSheet,Text,Button } from 'react-native';
 import ModalProfileUpdate from '../components/ModalProfileUpdate';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function PerfilScreen({}) {
 const {userData} = useContext(AuthContext);
 const [modalVisible, setModalVisible] = useState(false);
 const {updateUser} = useContext(UserContext);
+const navigation = useNavigation();
+
 
 //Enviamos los datos del modal al userContext para que maneje la logica y validaciones
-const handleSave = async (data) => {
-  updateUser(data)
-}
+  const handleSave = async (data) => {
+    try {
+      //await para esperar que se actualice
+      const result = await updateUser(data); 
+      // si tiene los datos completos, redirijo al index de los centros
+      if (result) {
+        navigation.navigate('CentroStack', { screen: 'IndexCentro' });
+      }
+    } catch (error) {
+      console.error('Error al actualizar usuario:', error);
+      // Manejar el error si updateUser falla
+    }
+  };
+
+
 return (
     <View style={styles.container}>
       <UserProfile userData={userData}/>

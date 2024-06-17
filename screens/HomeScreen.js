@@ -10,7 +10,7 @@ const HomeScreen = ({ navigation }) => {
   const data = [
     { key: '1', title: '¿Por qué donar sangre?', content: 'Donar sangre es un acto altruista que puede salvar muchas vidas. Cada donación puede ayudar hasta a tres personas en situaciones de emergencia, cirugías y tratamientos de enfermedades crónicas.' },
     { key: '2', title: 'Estadísticas de Donantes', content: 'En el mundo, millones de personas necesitan transfusiones de sangre cada año. Ayuda a aumentar el número de donantes y a salvar vidas.' },
-    { key: '3', title: 'Donar', action: () => navigation.navigate('DonarScreen')},
+    { key: '3', title: 'Donar', action: () => navigation.navigate('Donar'), showIfAuthenticated: true },
     { key: '4', title: 'Perfil', action: () => navigation.navigate('Profile'), showIfAuthenticated: true },
     { key: '5', title: 'Iniciar Sesión', action: () => navigation.navigate('Login'), showIfAuthenticated: false },
     { key: '6', title: 'Registrarme', action: () => navigation.navigate('Register'), showIfAuthenticated: false },

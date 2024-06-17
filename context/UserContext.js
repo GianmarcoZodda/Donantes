@@ -6,7 +6,9 @@ export const UserContext = createContext();
 const INVALID_DATA_ERROR_MESSAGE = "Error: Los datos ingresados son inválidos.";
 export const UserProvider = ({ children }) => {
   const { userData,setDataUser } = useContext(AuthContext);
+
   const updateUser = async (data) => {
+    let result = false;
     try {
       const combinedData = { ...userData, ...data }; // Combinar datos existentes con nuevos datos
       const jsonValue = JSON.stringify(combinedData);
@@ -32,6 +34,7 @@ export const UserProvider = ({ children }) => {
           if (response.ok) {
             await AsyncStorage.setItem("user", jsonValue);
             setDataUser(combinedData)
+            result = true;
             alert("Los datos fueron agregados correctamente")
           }
         }
@@ -41,6 +44,7 @@ export const UserProvider = ({ children }) => {
     } catch (error) {
       console.error("Error al guardar los datos", error);
     }
+    return result;
   };
 
  // Funciones de validación
