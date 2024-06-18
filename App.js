@@ -44,7 +44,7 @@ export default function App() {
               <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Profile" component={PerfilScreen} />
-              <Stack.Screen name="CentroStack" component={CentroStack} options={{ headerShown: false }}/>
+              <Stack.Screen name="CentroStack" component={CentroStack}/>
             </Stack.Navigator>
           </NavigationContainer>
         </UserProvider>
