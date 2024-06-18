@@ -1,5 +1,5 @@
 import React,{useContext}from 'react';
-import { View, Text, Button, StyleSheet, Image, FlatList } from 'react-native';
+import { View, Text, Button, StyleSheet, FlatList } from 'react-native';
 import { AuthContext } from '../context/AuthContext.js';
 
 const HomeScreen = ({ navigation }) => {
