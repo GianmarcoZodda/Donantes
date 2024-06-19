@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
-import React, { useContext, useState, useEffect} from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import React, { useContext, useState} from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import CustomPasswordButton from '../components/CustomPasswordButton'
 
 export default function RegisterScreen( {} ) {
 
@@ -12,6 +13,7 @@ export default function RegisterScreen( {} ) {
     const [name, setName] = useState('');
     const [lastName, setLastName] = useState('')
     const navigation = useNavigation()
+    const [showPassword, setShowPassword] = useState(false);
 
 
 
@@ -40,6 +42,9 @@ export default function RegisterScreen( {} ) {
         }
         return true;
     }
+    const passwordState = () => {
+      setShowPassword(!showPassword);
+    };
 
   return (
     <View style={styles.container}>
@@ -62,19 +67,26 @@ export default function RegisterScreen( {} ) {
       value={lastName}
       onChangeText={setLastName}
     />
-    <TextInput
-      style={styles.input}
-      placeholder="Password"
-      value={password}
-      onChangeText={setPassword}
-    />
-    <TextInput
-      style={styles.input}
-      placeholder="Confirm Password"
-      value={confirmPassword}
-      onChangeText={setConfirmPassword}
-    />
-    <Button title="Registrarme" onPress={handleRegister} />
+       <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+        />
+        <CustomPasswordButton visible={showPassword} onPress={passwordState}/>
+      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry={!showPassword}
+      />
+      <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
+        <Text style={styles.registerButtonText}>Registrarme</Text>
+      </TouchableOpacity>
   </View>
   )
 }
@@ -82,24 +94,47 @@ export default function RegisterScreen( {} ) {
 
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      padding: 16,
-    },
-    title: {
-      fontSize: 24,
-      marginBottom: 16,
-      textAlign: 'center',
-    },
-    input: {
-      height: 40,
-      borderColor: 'gray',
-      borderWidth: 1,
-      marginBottom: 12,
-      padding: 8,
-      borderRadius: 4,
-    },
-  });
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    padding: 8,
+    borderRadius: 4,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  passwordInput: {
+    flex: 1,
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 8,
+    borderRadius: 4,
+  },
+  registerButton: {
+    backgroundColor: 'blue',
+    padding: 12,
+    borderRadius: 4,
+    alignItems: 'center',
+  },
+  registerButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+});
 
 
