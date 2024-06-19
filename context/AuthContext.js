@@ -1,8 +1,12 @@
 
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as LocalAuthentication from 'expo-local-authentication';
 
 export const AuthContext = createContext();
+const COMPATIBILIDAD_ERROR = 'La autenticación biométrica no es compatible en este dispositivo';
+const HUELLA_NOT_FOUND = 'No hay biometría registrada en este dispositivo';
+const AUTENTICATE_ERROR = 'La autenticación biométrica falló';
 
 export const AuthProvider = ({ children }) => {
 
@@ -10,16 +14,22 @@ export const AuthProvider = ({ children }) => {
     const [userData, setDataUser] = useState(null);
  useEffect(() => {
     // Utilizamos este useEffect para setear si hay algun cambio en el estado
-        const cargarEstadoAuth = async () => {
-            const isAuthenticated = await AsyncStorage.getItem('isAuthenticated')
-
-            if(isAuthenticated === 'true'){
-                setStatus('authenticated')
-            }else{
-                setStatus('unauthenticated')
+    const cargarEstadoAuth = async () => {
+        const isAuthenticated = await AsyncStorage.getItem('isAuthenticated')
+    //Persistimos los datos del usuario y validamos la huella cuando el status del user es autenticado
+        if (isAuthenticated === 'true') {
+            try {
+                await persistData()
+                await authenticateBiometric();
+                setStatus('authenticated');
+            } catch (error) {
+                setStatus('unauthenticated');
+                alert('Autenticación biométrica fallida');
             }
-
+        } else {
+            setStatus('unauthenticated');
         }
+    }
     /* Chequeamos que la info del user este actualizada y parseamos el value del storage para poder utilizarlo,
     seteamos el objeto a los datos del user asi usarlo en cualquier parte de la app */
     // - No se si esto podria ser comprometedor en terminos de seguridad - Chequear con el profe
@@ -30,9 +40,8 @@ export const AuthProvider = ({ children }) => {
                 setDataUser(jsonPersist)
             }
         }
-        persistData()
         cargarEstadoAuth()
-    }, [status,])
+    }, [])
 
     const login = async (email, password) => {
         let resultado = false
@@ -112,9 +121,29 @@ export const AuthProvider = ({ children }) => {
         await AsyncStorage.removeItem('user');
         setDataUser(null)
     }
+//Funcion que se encarga de hacer la validacion biometrica
+    const authenticateBiometric = async () => {
+        const compatible = await LocalAuthentication.hasHardwareAsync();
+        if (!compatible) {
+            alert(COMPATIBILIDAD_ERROR);
+        }
+
+        const enrolled = await LocalAuthentication.isEnrolledAsync();
+        if (!enrolled) {
+            alert(HUELLA_NOT_FOUND);
+        }
+
+        const result = await LocalAuthentication.authenticateAsync({
+            promptMessage: 'Autenticar',
+        });
+
+        if (!result.success) {
+            alert(AUTENTICATE_ERROR);
+        }
+    }
 
     return (
-        <AuthContext.Provider value={{ userData,setDataUser,status, login, register, logout}}>
+        <AuthContext.Provider value={{ userData,setDataUser,status, login, register, logout,authenticateBiometric }}>
             { children }
         </AuthContext.Provider>
      )
