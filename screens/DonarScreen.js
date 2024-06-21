@@ -27,6 +27,7 @@ const DonarScreen = () => {
 
         //si no, me manda a llenar los datos
         else{
+          alert('Para donar por favor completa tus datos');
             navigation.navigate('Profile');
         }
         
