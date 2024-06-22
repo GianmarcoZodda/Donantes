@@ -21,7 +21,8 @@ export const UserProvider = ({ children }) => {
         if (userData.id != null) {
           //Buscamos a la persona por el id, este se crea al momento de hacer el register
           const personaId = userData.id;
-          const apiUrl = `https://665b5468003609eda4609543.mockapi.io/people/${personaId}`;
+          // mockapi vieja   https://665b5468003609eda4609543.mockapi.io/people          
+          const apiUrl = `https://667742a1145714a1bd7440f6.mockapi.io/people/${personaId}`;
           //Hacemos un patch para agregar nuevos atributos al user
           const response = await fetch(apiUrl, {
             method: "PATCH",

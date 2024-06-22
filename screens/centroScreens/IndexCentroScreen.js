@@ -20,6 +20,7 @@ const IndexCentroScreen = () => {
       </TouchableOpacity>
     );
     
+    /* Agregar boton de turno   --> Un calendario con el dia y otro campo con la hora*/
 
     return (
         <View style={styles.container}>

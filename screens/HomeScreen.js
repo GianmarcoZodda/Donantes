@@ -1,6 +1,7 @@
 import React,{useContext}from 'react';
 import { View, Text, Button, StyleSheet, FlatList } from 'react-native';
 import { AuthContext } from '../context/AuthContext.js';
+import { Linking } from 'react-native';
 
 const HomeScreen = ({ navigation }) => {
   const { status,logout } = useContext(AuthContext);
@@ -15,7 +16,7 @@ const HomeScreen = ({ navigation }) => {
     { key: '5', title: 'Iniciar Sesión', action: () => navigation.navigate('Login'), showIfAuthenticated: false },
     { key: '6', title: 'Registrarme', action: () => navigation.navigate('Register'), showIfAuthenticated: false },
     { key: '7', title: 'Ver Centros', action: () => navigation.navigate('CentroStack'), showIfAuthenticated: true },
-    { key: '8', title: 'Ver Noticias', action: () => navigation.navigate('News') },
+    { key: '8', title: 'Ver Noticias', action: () => Linking.openURL('https://www.argentina.gob.ar/salud/donarsangre') },
     { key: '9', title: 'Cerrar Sesion ', action: () => logout(), showIfAuthenticated: true },
     //{ key: '9', title: status }, 
   ];
