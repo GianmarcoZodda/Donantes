@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Modal, TextInput, TouchableOpacity , StyleSheet,Text  } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import DateOfBirthPicker from './DateOfBirthPicker';
 
 const ModalProfileUpdate = ({ visible, onClose, onSave }) => {
     const [address, setAddress] = useState('');
@@ -9,8 +10,14 @@ const ModalProfileUpdate = ({ visible, onClose, onSave }) => {
     const [bloodType, setBloodType] = useState('');
   
     const handleSave = () => {
-      onSave({ address, phone,birthDate,bloodType });
-      
+    
+    // Validamos fecha de nacimiento que sea MENOR a hoy  
+      const today = new Date();
+    if (birthDate && birthDate > today) {
+      alert("Fecha de Nacimiento Invalida.");
+      return;
+    }
+      onSave({ address, phone,birthDate,bloodType });      
       onClose();
     };
   
@@ -37,11 +44,9 @@ const ModalProfileUpdate = ({ visible, onClose, onSave }) => {
             keyboardType="numeric"
             style={styles.input}
           />
-          <TextInput
-            placeholder="Fecha de nacimiento (DD/MM/YYYY)"
-            value={birthDate}
-            onChangeText={setBirthDate}
-            style={styles.input}
+          <DateOfBirthPicker
+            selectedDate={birthDate}
+            onDateChange={(date) => setBirthDate(date)}
           />
           <Picker
             selectedValue={bloodType}
