@@ -82,24 +82,56 @@ export const CentroProvider = ({ children }) => {
     }
     return result;
   };
-  const eliminarHorario = async(centro,fecha,hora)=>{
+  const eliminarHorario = async (centroId, fecha, hora) => {
     try {
-      const response = await fetch(`https://6678608a0bd45250561e79c7.mockapi.io/centros/${centro.id}/horarios/${fecha}/${hora}`, {
-          method: "DELETE",
-          headers: {
-              "Content-Type": "application/json",
-          },
-      });
-
-      if (response.ok) {
-          console.log("El horario se elimino correctamente")
-      }else{
-        console.error(`HTTP error! Status: ${response.status}`);
+      // Obtener el centro por su ID
+      const response = await fetch(`${API_URL}/${centroId}`);
+      const centro = await response.json();
+      if (!response.ok) {
+        console.error(`Error al obtener el centro: ${response.status}`);
+        return;
       }
-  } catch (error) {
-      console.error("Error al eliminar el horario:", error);
-  }
-}
+  
+      // Encontrar el horario específico
+      const horarioIndex = centro.horarios.findIndex(h => h.fecha === fecha);
+      if (horarioIndex === -1) {
+        console.error('Fecha no encontrada en los horarios del centro.');
+        return;
+      }
+  
+      // Eliminar la hora específica
+      const horas = centro.horarios[horarioIndex].horas;
+      const horaIndex = horas.findIndex(h => h === hora);
+      if (horaIndex === -1) {
+        console.error('Hora no encontrada en la fecha especificada.');
+        return;
+      }
+      horas.splice(horaIndex, 1);
+  
+      // Si la fecha no tiene más horas, eliminar la fecha
+      if (horas.length === 0) {
+        centro.horarios.splice(horarioIndex, 1);
+      }
+  
+      // Actualizar el centro en la API
+      const updateResponse = await fetch(`${API_URL}/${centroId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(centro),
+      });
+  
+      if (updateResponse.ok) {
+        console.log('El horario se eliminó correctamente');
+      } else {
+        console.error(`Error al actualizar el centro: ${updateResponse.status}`);
+      }
+    } catch (error) {
+      console.error('Error al eliminar el horario:', error);
+    }
+  };
+
   // Funciones de validación
 
   //valido que los params del centro no sean nulos

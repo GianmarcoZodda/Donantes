@@ -20,6 +20,7 @@ const DonarScreen = () => {
     const {handleTurno} = useContext(TurnoContext);
 
     const HandleDonationProcess = () =>{
+
         //hay un error trayendome la data:
         if (!userData) {
             alert("Error: Datos del usuario no disponibles.");
