@@ -28,15 +28,13 @@ const navigation = useNavigation();
       // Manejar el error si updateUser falla
     }
   };
-
-
 return (
     <View style={styles.container}>
       <UserProfile userData={userData}/>
-      <Text style={styles.tamanio}>Direccion: {userData.address}</Text>
-      <Text style={styles.tamanio}>Celular: {userData.phone}</Text>
-      <Text style={styles.tamanio}>Fecha de nacimiento: {userData.birthDate}</Text>
-      <Text style={styles.tamanio}>Tipo de sangre: {userData.bloodType}</Text>
+      <Text style={styles.tamanio}>Direccion: {userData.address || ''}</Text>
+      <Text style={styles.tamanio}>Celular: {userData.phone || ''}</Text>
+      <Text style={styles.tamanio}>Fecha de nacimiento: {userData.birthDate || ''}</Text>
+      <Text style={styles.tamanio}>Tipo de sangre: {userData.bloodType || ''}</Text>
       <Button title="Agregar datos" onPress={() => setModalVisible(true)} />
       <ModalProfileUpdate
         visible={modalVisible}
@@ -50,13 +48,13 @@ return (
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#f9f9f9', // Fondo suave y claro
-    borderRadius: 10, // Bordes redondeados
+    backgroundColor: '#f9f9f9', 
+    borderRadius: 10, 
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 5, // Sombra en Android
+    elevation: 5, 
     margin: 20,
   },
   tamanio:{

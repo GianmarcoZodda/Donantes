@@ -15,14 +15,13 @@ export const UserProvider = ({ children }) => {
       //Validamos todos los  campos
       const isValid = validateAddress(combinedData.address) &&
                       validatePhone(combinedData.phone) &&
-                      validateBirthDate(combinedData.birthDate) &&
                       validateBloodType(combinedData.bloodType);
       if(isValid){
         if (userData.id != null) {
           //Buscamos a la persona por el id, este se crea al momento de hacer el register
           const personaId = userData.id;
           // mockapi vieja   https://665b5468003609eda4609543.mockapi.io/people          
-          const apiUrl = `https://667742a1145714a1bd7440f6.mockapi.io/people/${personaId}`;
+          const apiUrl = `https://665b5468003609eda4609543.mockapi.io/people/${personaId}`;
           //Hacemos un patch para agregar nuevos atributos al user
           const response = await fetch(apiUrl, {
             method: "PATCH",
@@ -55,17 +54,6 @@ const validateAddress = (address) => {
 
 const validatePhone = (phone) => {
   return phone && phone.trim().length === 10;
-};
-
-const validateBirthDate = (birthDate) => {
-  // Regex para validar formato DD/MM/YYYY
-  const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
-  if (!regex.test(birthDate)) return false;
-
-  // Verificar que la fecha sea válida
-  const [day, month, year] = birthDate.split('/').map(Number);
-  const date = new Date(year, month - 1, day);
-  return date.getDate() === day && date.getMonth() === month - 1 && date.getFullYear() === year;
 };
 
 const validateBloodType = (bloodType) => {

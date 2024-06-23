@@ -24,7 +24,6 @@ const HomeScreen = ({ navigation }) => {
 
 //a esta funcion le llega un item (elemento de data)
   const renderItem = ({ item }) => {
-
     if (item.showIfAuthenticated !== undefined && item.showIfAuthenticated !== isAuthenticated) {
       return null;
     }

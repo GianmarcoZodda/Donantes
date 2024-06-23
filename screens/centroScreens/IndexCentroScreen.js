@@ -2,11 +2,12 @@ import React, { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { CentroContext } from '../../context/CentroContext';
+import { AuthContext } from '../../context/AuthContext';
 
 const IndexCentroScreen = () => {
     const { centros, fetchCentros } = useContext(CentroContext);
     const navigation = useNavigation();
-
+    const {userData} = useContext(AuthContext);
     useEffect(() => {
         fetchCentros();
     }, []);
@@ -24,18 +25,24 @@ const IndexCentroScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Button title="Agregar Centro" onPress={() => navigation.navigate("AddCentro")} />
-            <View style={styles.header}>
-                <Text style={styles.headerText}>Nombre del Centro</Text>
-                <Text style={styles.headerText}>Direccion</Text>
-            </View>
-            <FlatList
-                data={centros}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id.toString()}
+          {userData.admin && (
+            <Button
+              title="Agregar Centro"
+              onPress={() => navigation.navigate("AddCentro")}
+              style={styles.button}
             />
+          )}
+          <View style={styles.header}>
+            <Text style={styles.headerText}>Nombre del Centro</Text>
+            <Text style={styles.headerText}>Direccion</Text>
+          </View>
+          <FlatList
+            data={centros}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id.toString()}
+          />
         </View>
-    );
+      );
 };
 
 const styles = StyleSheet.create({

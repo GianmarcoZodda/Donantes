@@ -115,15 +115,15 @@ const styles = StyleSheet.create({
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    borderColor: 'gray',
+    borderWidth: 1,
     marginBottom: 12,
+    borderRadius: 4,
   },
   passwordInput: {
     flex: 1,
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
     padding: 8,
-    borderRadius: 4,
   },
   registerButton: {
     backgroundColor: 'blue',

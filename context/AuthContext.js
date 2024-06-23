@@ -12,7 +12,7 @@ const ERROR_COMPARE = "Error comparando contraseñas";
 
 export const AuthProvider = ({ children }) => {
   const [status, setStatus] = useState("checking");
-  const [userData, setDataUser] = useState(null);
+  const [userData, setDataUser] = useState();
   useEffect(() => {
     // Utilizamos este useEffect para setear si hay algun cambio en el estado
     const cargarEstadoAuth = async () => {
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
       // Hacemos el fetch y nos traemos todos los usuarios para validar si el usuario ya esta registrado
       if (validarDatosUsuario(email, password)) {
         const respuesta = await fetch(
-          "https://667742a1145714a1bd7440f6.mockapi.io/people"
+          "https://665b5468003609eda4609543.mockapi.io/people"
         );
         const users = await respuesta.json();
         const user = users.find((element) => element.email === email);
@@ -60,14 +60,13 @@ export const AuthProvider = ({ children }) => {
             password,
             user.password
           );
-          console.log(matchPassword)
           if (matchPassword) {
             //Seteamos el cambio en el storage y actualizamos el status
             await AsyncStorage.setItem("isAuthenticated", "true");
             setStatus("authenticated");
             // Seteamos el item user con el value JSON.stringify(user)), esto para guardar todos los datos
             await AsyncStorage.setItem("user", JSON.stringify(user));
-            setDataUser(JSON.stringify(user));
+            setDataUser(user);
             alert("Sesion iniciada");
             resultado = true;
           } else {
@@ -94,23 +93,23 @@ export const AuthProvider = ({ children }) => {
       //validamos los datos pasados por parametro
       if (validarDatosUsuario(userData.email, userData.password)) {
         //validamos si el email existe dentro de nuestra api, si no existe procedemos a registrar al usuario
-        // mockapi vieja  https://665b5468003609eda4609543.mockapi.io/people
+        // mockapi vieja  "https://667742a1145714a1bd7440f6.mockapi.io/people"
         const respuesta = await fetch(
-          "https://667742a1145714a1bd7440f6.mockapi.io/people"
+          "https://665b5468003609eda4609543.mockapi.io/people"
         );
         const users = await respuesta.json();
         //Encripto la password para persistir los datos en la api
         const encryptPassword = await hashPassword(userData.password);
         if (!users.find((element) => element.email === userData.email) && encryptPassword != undefined) {
-          //mockapi vieja  https://665b5468003609eda4609543.mockapi.io/people
+          //mockapi vieja  "https://667742a1145714a1bd7440f6.mockapi.io/people"
           const response = await fetch(
-            "https://667742a1145714a1bd7440f6.mockapi.io/people",
+            "https://665b5468003609eda4609543.mockapi.io/people",
             {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ ...userData, password: encryptPassword }),
+              body: JSON.stringify({ ...userData, password: encryptPassword,admin: false }),
             }
           );
           if (response.ok) {

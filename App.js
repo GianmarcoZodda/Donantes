@@ -13,6 +13,7 @@ import DetailsCentroScreen from "./screens/centroScreens/DetailsCentroScreen";
 import EditCentroScreen from "./screens/centroScreens/EditCentroScreen";
 import DeleteCentroScreen from "./screens/centroScreens/DeleteCentroScreen";
 import { UserProvider } from "./context/UserContext";
+import { TurnoProvider } from "./context/TurnoContext";
 //import NewsScreen from './screens/NewsScreen';
 
 const Stack = createStackNavigator();
@@ -37,6 +38,7 @@ export default function App() {
     <AuthProvider>
       <CentroProvider>
         <UserProvider>
+          <TurnoProvider>
           <NavigationContainer>
             <Stack.Navigator initialRouteName="Home">
             <Stack.Screen name="Donar" component={DonarScreen} />
@@ -47,6 +49,7 @@ export default function App() {
               <Stack.Screen name="CentroStack" component={CentroStack}/>
             </Stack.Navigator>
           </NavigationContainer>
+          </TurnoProvider>
         </UserProvider>
       </CentroProvider>
     </AuthProvider>
