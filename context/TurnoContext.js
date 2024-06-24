@@ -8,7 +8,7 @@ export const TurnoContext = createContext();
 
 export const TurnoProvider = ({ children }) => {
     const {userData} = useContext(AuthContext);
-    const{eliminarHorario, agregarHorario} = useContext(CentroContext);
+    const{eliminarHorario, reAgregarHorario} = useContext(CentroContext);
     const [turno, setTurno] = useState(null);
 
     useEffect(() => {
