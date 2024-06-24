@@ -8,7 +8,7 @@ export const TurnoContext = createContext();
 
 export const TurnoProvider = ({ children }) => {
     const {userData} = useContext(AuthContext);
-    const{eliminarHorario, agregarHorario} = useContext(CentroContext);
+    const{eliminarHorario, reAgregarHorario} = useContext(CentroContext);
     const [turno, setTurno] = useState(null);
 
     useEffect(() => {
@@ -70,7 +70,7 @@ export const TurnoProvider = ({ children }) => {
             alert("Tu turno ha sido cancelado.");
             if (turno) {
                 // // Reagregar el turno cancelado a la lista de horarios disponibles
-                agregarHorario(turno.centroId, turno.fecha, turno.hora); 
+                reAgregarHorario(turno.centroId, turno.fecha, turno.hora); 
               }
             setTurno(null);
           } else {
