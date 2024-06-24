@@ -29,7 +29,7 @@ export const CentroProvider = ({ children }) => {
   // Obtener los centros almacenados al cargar el componente
   useEffect(() => {
     fetchCentros();
-  }, []);
+  }, [centros.horarios,]);
 
   //agrego centro
   const addCentro = async (newCentro) => {
@@ -137,11 +137,6 @@ export const CentroProvider = ({ children }) => {
 
   // Agregar horario al centro
   const agregarHorarioCentro = async (centroId, fecha, hora) => {
-    if (!userData.admin) {
-      console.error("Permiso denegado: No eres administrador");
-      return;
-    }
-
     try {
       const response = await fetch(`${API_URL}/${centroId}`);
       if (!response.ok) {
@@ -298,12 +293,9 @@ export const CentroProvider = ({ children }) => {
         );
         result = true;
         alert("Centro eliminado correctamente");
-      } else {
-        alert("Error eliminando el centro");
       }
     } catch (error) {
       console.error("Error eliminando el centro:", error);
-      console.error("Error eliminando el centro");
     }
   };
 
