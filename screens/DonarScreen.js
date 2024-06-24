@@ -21,7 +21,6 @@ const DonarScreen = () => {
 
     const HandleDonationProcess = () =>{
 
-        //hay un error trayendome la data:
         if (!userData) {
             alert("Error: Datos del usuario no disponibles.");
             return;
@@ -30,7 +29,6 @@ const DonarScreen = () => {
         //chequeo si el usuario completo previamente datos importantes, como su tipo de sangre y su edad, x ejemplo
         const tieneDataCompleta = (userData.birthDate != null) && (userData.bloodType != null);
 
-        //si lo hizo, me muestras los centros disponibles
         if(tieneDataCompleta){
             handleTurno(selectedCentroId,selectedDia,selectedHora)
         }
@@ -63,7 +61,7 @@ const DonarScreen = () => {
         </Picker>
   
 
-        {/* Selector de días */}
+        {/* Selector de fecha */}
       <View style={styles.datePickerContainer}>
       <TurnoPickerComponent selectedDate={selectedDia}  onDateChange={(date) => setSelectedDia(date)}/>
       <Text style={styles.selectedDate}>{selectedDia}</Text>
@@ -81,7 +79,7 @@ const DonarScreen = () => {
           <Picker.Item key={hora} label={hora} value={hora} />
         ))}
       </Picker>
-  
+        
     <TouchableOpacity style={styles.agendarButton} onPress={HandleDonationProcess} disabled={!selectedCentroId || !selectedHora}>
         <Text style={styles.agendarButtonText}>Agendar Turno</Text>
       </TouchableOpacity>

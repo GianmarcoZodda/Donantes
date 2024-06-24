@@ -27,22 +27,23 @@ const DetailsCentroScreen = () => {
       </Text>
       <Text style={styles.info}>Email: {centro.email}</Text>
       <Text style={styles.horariosTitle}>Horarios:</Text>
-      {centro.horarios.map(horario => (
-            <Text key={horario.dia} style={styles.horarios}>
-              {horario.dia}: {horario.horas.join(', ')}
-            </Text>
-          ))}
+      {centro.horarios.map((horario) => (
+        <Text key={horario.fecha} style={styles.horarios}>
+          {horario.fecha}: {horario.horas.join(", ")}
+        </Text>
+      ))}
 
-
-      {userData.admin &&(
-        <Button
-          title="Editar"
-          onPress={() => HandleNavigation("EditCentro", centro)}
-        />,
-        <Button
-          title="Eliminar"
-          onPress={() => HandleNavigation("DeleteCentro", centro)}
-        />
+      {userData.admin && (
+        <View>
+          <Button
+            title="Editar"
+            onPress={() => HandleNavigation("EditCentro", centro)}
+          />
+          <Button
+            title="Eliminar"
+            onPress={() => HandleNavigation("DeleteCentro", centro)}
+          />
+        </View>
       )}
     </View>
   );
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   },
   horariosTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 5,
   },
   horarios: {

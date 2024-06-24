@@ -82,6 +82,7 @@ export const CentroProvider = ({ children }) => {
     }
     return result;
   };
+  //Esta funcion elimina el horario que agendo el usuario 
   const eliminarHorario = async (centroId, fecha, hora) => {
     try {
       // Obtener el centro por su ID

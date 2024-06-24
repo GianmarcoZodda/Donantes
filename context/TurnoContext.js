@@ -9,7 +9,7 @@ export const TurnoContext = createContext();
 export const TurnoProvider = ({ children }) => {
     const {userData} = useContext(AuthContext);
     const{eliminarHorario} = useContext(CentroContext);
-
+// Este metodo se encarga de gestionar el turno recive por parametro el ID del centro
     const handleTurno = async(centro,fecha,hora) => {
         if(validarUser){
             try {
@@ -39,6 +39,10 @@ export const TurnoProvider = ({ children }) => {
         }
     };
 
+    const cancelarTurno= async () =>{
+
+    }
+    // Validamos si el miismo user ya tiene un turno -- Se podria agregar una validacion para que no pueda sacar turno con menos de 3 meses de separacion
     const validarUser= async()=>{
         let resul = true
         const response = await fetch("https://6678608a0bd45250561e79c7.mockapi.io/turnos");
