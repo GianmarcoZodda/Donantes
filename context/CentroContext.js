@@ -13,7 +13,6 @@ const API_URL =
 
 // Proveedor del contexto
 export const CentroProvider = ({ children }) => {
-  const { userData } = useContext(AuthContext);
   const [centros, setCentros] = useState([]);
 
   const fetchCentros = async () => {
@@ -299,6 +298,18 @@ export const CentroProvider = ({ children }) => {
     }
   };
 
+  //Esta funcion busca un centro por su id y devuelve el centro 
+  const buscarCentro = async (centroId) => {
+    try{
+      const response  = await fetch(`${API_URL}/${centroId}`,{
+        method: "GET"
+      });
+      const centro = await response.json()
+      return centro
+    }catch(error){
+      console.error("Error al buscar el centro",error)
+    }
+  }
   // Proveer el estado y las funciones a los componentes hijos
   return (
     <CentroContext.Provider
@@ -311,6 +322,7 @@ export const CentroProvider = ({ children }) => {
         deleteCentro,
         eliminarHorario,
         agregarHorarioCentro,
+        buscarCentro
       }}
     >
       {children}
