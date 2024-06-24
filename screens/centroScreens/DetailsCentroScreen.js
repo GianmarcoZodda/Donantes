@@ -63,11 +63,15 @@ const DetailsCentroScreen = () => {
       </Text>
       <Text style={styles.info}>Email: {centro.email}</Text>
       <Text style={styles.horariosTitle}>Horarios:</Text>
-      {centro.horarios.map((horario) => (
-        <Text key={horario.fecha} style={styles.horarios}>
-          {horario.fecha}: {horario.horas.join(", ")}
-        </Text>
-      ))}
+      {centro.horarios && centro.horarios.length > 0 ? (
+        centro.horarios.map((horario) => (
+          <Text key={horario.fecha} style={styles.horarios}>
+            {horario.fecha}: {horario.horas.join(", ")}
+          </Text>
+        ))
+      ) : (
+        <Text style={styles.horarios}>No hay horarios disponibles</Text>
+      )}
 
       {userData.admin && (
         <View>
