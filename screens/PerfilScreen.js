@@ -5,12 +5,13 @@ import UserProfile from '../components/UserProfile';
 import { View, StyleSheet,Text,Button } from 'react-native';
 import ModalProfileUpdate from '../components/ModalProfileUpdate';
 import { useNavigation } from '@react-navigation/native';
-
+import { TurnoContext } from '../context/TurnoContext';
 
 export default function PerfilScreen({}) {
 const {userData} = useContext(AuthContext);
 const [modalVisible, setModalVisible] = useState(false);
 const {updateUser} = useContext(UserContext);
+const { turno, cancelarTurno } = useContext(TurnoContext);
 const navigation = useNavigation();
 
 
@@ -41,6 +42,21 @@ return (
         onClose={() => setModalVisible(false)}
         onSave={handleSave}
       />
+
+      {turno ? (
+        <View style={styles.turnoContainer}>
+          <Text style={styles.turnoTitle}>Tu próximo turno</Text>
+          <Text style={styles.turnoInfo}>Centro: {turno.centro}</Text>
+          <Text style={styles.turnoInfo}>Fecha: {turno.fecha}</Text>
+          <Text style={styles.turnoInfo}>Hora: {turno.hora}</Text>
+          <Button title="Cancelar Turno" onPress={() => cancelarTurno(turno.id)} />
+        </View>
+      ) : (
+        <View style={styles.noTurnoContainer}>
+          <Text style={styles.noTurnoText}>Sin Proximo Turno</Text>
+        </View>
+    )}
+
     </View>
   )
 };
@@ -59,5 +75,40 @@ const styles = StyleSheet.create({
   },
   tamanio:{
     fontSize: 20,
-  }
+  },
+  turnoContainer: {
+    marginTop: 20,
+    padding: 16,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+  },
+  turnoTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  turnoInfo: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  noTurnoContainer: {
+    marginTop: 20,
+    padding: 16,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    alignItems: 'center',
+  },
+  noTurnoText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#555',
+  },
   });
