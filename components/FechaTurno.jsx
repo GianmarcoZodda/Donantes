@@ -36,6 +36,8 @@ const TurnoPickerComponent = ({ selectedDate,onDateChange }) => {
         mode="date"
         display="default"
         onChange={onChange}
+        // agregamos control para fecha minima dia de la fecha
+        minimumDate={new Date()}
         />
       )}
     </View>
