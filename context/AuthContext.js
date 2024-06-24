@@ -4,11 +4,13 @@ import * as LocalAuthentication from "expo-local-authentication";
 import * as Crypto from "expo-crypto";
 
 export const AuthContext = createContext();
+
 const COMPATIBILIDAD_ERROR ="La autenticación biométrica no es compatible en este dispositivo";
 const HUELLA_NOT_FOUND = "No hay biometría registrada en este dispositivo";
 const AUTENTICATE_ERROR = "La autenticación biométrica falló";
 const ERROR_ENCRYPT_PASSWORD = "Error en el encriptado de la contraseña";
 const ERROR_COMPARE = "Error comparando contraseñas";
+const URL_PERSONAS = "https://665b5468003609eda4609543.mockapi.io/people";
 
 export const AuthProvider = ({ children }) => {
   const [status, setStatus] = useState("checking");
@@ -49,9 +51,7 @@ export const AuthProvider = ({ children }) => {
     try {
       // Hacemos el fetch y nos traemos todos los usuarios para validar si el usuario ya esta registrado
       if (validarDatosUsuario(email, password)) {
-        const respuesta = await fetch(
-          "https://665b5468003609eda4609543.mockapi.io/people"
-        );
+        const respuesta = await fetch(URL_PERSONAS);
         const users = await respuesta.json();
         const user = users.find((element) => element.email === email);
         if (user) {
@@ -72,13 +72,11 @@ export const AuthProvider = ({ children }) => {
           } else {
             alert("Error en login");
             setStatus("unauthenticated");
-            resultado = false;
           }
         } else {
           // Si no se encuentra el usuario, mostramos un mensaje de error
           alert("Usuario no encontrado. Por favor, registrese.");
           setStatus("unauthenticated");
-          resultado = false;
         }
       }
       return resultado;
@@ -87,6 +85,8 @@ export const AuthProvider = ({ children }) => {
       alert("Error en login catch");
     }
   };
+
+
   const register = async (userData) => {
     let resultado = false;
     try {
@@ -94,16 +94,14 @@ export const AuthProvider = ({ children }) => {
       if (validarDatosUsuario(userData.email, userData.password)) {
         //validamos si el email existe dentro de nuestra api, si no existe procedemos a registrar al usuario
         // mockapi vieja  "https://667742a1145714a1bd7440f6.mockapi.io/people"
-        const respuesta = await fetch(
-          "https://665b5468003609eda4609543.mockapi.io/people"
-        );
+        const respuesta = await fetch(URL_PERSONAS);
         const users = await respuesta.json();
         //Encripto la password para persistir los datos en la api
         const encryptPassword = await hashPassword(userData.password);
         if (!users.find((element) => element.email === userData.email) && encryptPassword != undefined) {
           //mockapi vieja  "https://667742a1145714a1bd7440f6.mockapi.io/people"
           const response = await fetch(
-            "https://665b5468003609eda4609543.mockapi.io/people",
+            URL_PERSONAS,
             {
               method: "POST",
               headers: {
@@ -130,6 +128,7 @@ export const AuthProvider = ({ children }) => {
       alert("Error al registrar el usuario");
     }
   };
+
   // Validacion de datos tipo email y password / utilizando una expresion regular para el email y un numero de caracteres minimos para la password
   function validarDatosUsuario(correo, contrasena) {
     let regexCorreo =
@@ -141,13 +140,14 @@ export const AuthProvider = ({ children }) => {
     return false;
   }
 
-  // Ralizamos el logout eliminando el estado del storage y seteando el nuevo valor
+  // Realizamos el logout eliminando el estado del storage y seteando el nuevo valor
   const logout = async () => {
     await AsyncStorage.removeItem("isAuthenticated");
     setStatus("unauthenticated");
     await AsyncStorage.removeItem("user");
     setDataUser(null);
   };
+
   //Funcion que se encarga de hacer la validacion biometrica
   const authenticateBiometric = async () => {
     const compatible = await LocalAuthentication.hasHardwareAsync();
@@ -181,6 +181,7 @@ export const AuthProvider = ({ children }) => {
       console.error(ERROR_ENCRYPT_PASSWORD, error);
     }
   };
+  
 //Comparo los 2 parametros ingresados que corresponden a la password ingresada por user y la password almacenda en la api
 //encripto la password ingresada para poder compararla con la de la api correctamente
   const comparePassword = async (inputPassword, encryptPassword) => {

@@ -16,7 +16,7 @@ const HomeScreen = ({ navigation }) => {
     { key: '5', title: 'Iniciar Sesión', action: () => navigation.navigate('Login'), showIfAuthenticated: false },
     { key: '6', title: 'Registrarme', action: () => navigation.navigate('Register'), showIfAuthenticated: false },
     { key: '7', title: 'Ver Centros', action: () => navigation.navigate('CentroStack'), showIfAuthenticated: true },
-    { key: '8', title: 'Ver Noticias', action: () => Linking.openURL('https://www.argentina.gob.ar/salud/donarsangre') },
+    { key: '8', title: 'Mas Informacion', action: () => Linking.openURL('https://www.argentina.gob.ar/salud/donarsangre') },
     { key: '9', title: 'Cerrar Sesion ', action: () => logout(), showIfAuthenticated: true },
     //{ key: '9', title: status }, 
   ];
@@ -24,6 +24,7 @@ const HomeScreen = ({ navigation }) => {
 
 //a esta funcion le llega un item (elemento de data)
   const renderItem = ({ item }) => {
+    //si es diferente de undefined y diferente de autenticado, no lo muestra
     if (item.showIfAuthenticated !== undefined && item.showIfAuthenticated !== isAuthenticated) {
       return null;
     }

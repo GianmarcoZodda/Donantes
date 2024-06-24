@@ -6,6 +6,7 @@ import { CentroContext } from '../../context/CentroContext';
 const DeleteCentroScreen = () => {
     const { deleteCentro } = useContext(CentroContext);
     const navigation = useNavigation();
+    
     const route = useRoute();
     const { centro } = route.params;
 

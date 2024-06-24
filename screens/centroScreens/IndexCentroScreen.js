@@ -8,6 +8,8 @@ const IndexCentroScreen = () => {
     const { centros, fetchCentros } = useContext(CentroContext);
     const navigation = useNavigation();
     const {userData} = useContext(AuthContext);
+
+    //actualizo los centros
     useEffect(() => {
         fetchCentros();
     }, []);
@@ -23,6 +25,7 @@ const IndexCentroScreen = () => {
     
     /* Agregar boton de turno   --> Un calendario con el dia y otro campo con la hora*/
 
+    //valido si es admin me muestra el boton de agregar centro, sino no
     return (
         <View style={styles.container}>
           {userData.admin && (

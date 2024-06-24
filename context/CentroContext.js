@@ -1,6 +1,9 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { AuthContext } from "./AuthContext";
 
+
+//[VER SI PODEMOS INSTALAR TOAST, BIBLIOTECA, para las notificaciones (reemplaza alerts)]
+
 // Crear el contexto
 export const CentroContext = createContext();
 
@@ -8,8 +11,7 @@ export const CentroContext = createContext();
 const MIN_LONGITUD_NOMBRE = 2;
 
 // URL de la API
-const API_URL =
-  "https://665b5468003609eda4609543.mockapi.io/centros";
+const API_URL ="https://665b5468003609eda4609543.mockapi.io/centros";
 
 // Proveedor del contexto
 export const CentroProvider = ({ children }) => {
@@ -33,24 +35,15 @@ export const CentroProvider = ({ children }) => {
 
   //agrego centro
   const addCentro = async (newCentro) => {
-    const { nombre, direccion, email, telefonoConsultas, telefonoEmergencias } =
-      newCentro;
+    const { nombre, direccion, email, telefonoConsultas, telefonoEmergencias } = newCentro;
     let result = false;
 
-    // Validar los datos del nuevo centro
-    if (
-      validateInputs(
-        nombre,
-        direccion,
-        email,
-        telefonoConsultas,
-        telefonoEmergencias
-      )
-    ) {
-      if (
-        validateCenter(nombre, email, telefonoConsultas, telefonoEmergencias)
-      ) {
+    // Validar los datos del nuevo centro que no sean nulos
+    if (validateInputs(nombre,direccion,email,telefonoConsultas,telefonoEmergencias)) {
+      //valido que cumplan las restricciones definidas
+      if (validateCenter(nombre, email, telefonoConsultas, telefonoEmergencias)) {
         try {
+          //si pasa, intento (try) meterlo a la url de la api
           const response = await fetch(API_URL, {
             method: "POST",
             headers: {
@@ -58,18 +51,16 @@ export const CentroProvider = ({ children }) => {
             },
             body: JSON.stringify(newCentro),
           });
-
+          //si funciona.....
           if (response.ok) {
             //me guardo el centro que viene en la response
             const centroAgregado = await response.json();
             //agarro todos los centros anteriores y le agrego el newcentro (pero antes le agrego el id que me incluye la response, para que no me de el error)
-            setCentros((prevCentros) => [
-              ...prevCentros,
-              { ...newCentro, id: centroAgregado.id },
-            ]);
+            setCentros((prevCentros) => [...prevCentros,{ ...newCentro, id: centroAgregado.id },]);
+            //si llego aca todo funciono correctamente, el result a devolver es true
             result = true;
           } else {
-            //muestro tambien el estado de response
+            //muestro el estado de response
             console.error("Error al agregar el centro:", response.statusText);
           }
         } catch (error) {
@@ -84,6 +75,8 @@ export const CentroProvider = ({ children }) => {
     }
     return result;
   };
+
+
   //Esta funcion elimina el horario que agendo el usuario 
   const eliminarHorario = async (centroId, fecha, hora) => {
     try {
@@ -179,36 +172,17 @@ export const CentroProvider = ({ children }) => {
   // Funciones de validación
 
   //valido que los params del centro no sean nulos
-  const validateInputs = (
-    nombre,
-    direccion,
-    email,
-    telefonoConsultas,
-    telefonoEmergencias
-  ) => {
-    return (
-      nombre && direccion && email && telefonoConsultas && telefonoEmergencias
-    );
+  const validateInputs = (nombre,direccion,email,telefonoConsultas,telefonoEmergencias) => {
+    return (nombre && direccion && email && telefonoConsultas && telefonoEmergencias);
   };
 
   //valido al centro en gral, utilizando las validaciones de tipo
-  const validateCenter = (
-    nombre,
-    email,
-    telefonoConsultas,
-    telefonoEmergencias
-  ) => {
-    return (
-      validateName(nombre) &&
-      validateMail(email) &&
-      validatePhone(telefonoConsultas) &&
-      validatePhone(telefonoEmergencias)
-    );
+  const validateCenter = (nombre,email,telefonoConsultas,telefonoEmergencias) => {
+    return (validateName(nombre) && validateMail(email) && validatePhone(telefonoConsultas) && validatePhone(telefonoEmergencias));
   };
 
   const validateMail = (email) => {
-    const regexCorreo =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const regexCorreo = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return regexCorreo.test(email);
   };
 
@@ -223,29 +197,13 @@ export const CentroProvider = ({ children }) => {
 
   //editar centro
   const editCentro = async (centro) => {
-    //tambien obtengo el id, paraa luego utilizarlo
-    const {
-      id,
-      nombre,
-      direccion,
-      email,
-      telefonoConsultas,
-      telefonoEmergencias,
-    } = centro;
+    //tambien obtengo el id, para luego utilizarlo
+    const {id,nombre,direccion,email,telefonoConsultas,telefonoEmergencias,} = centro;
     let result = false;
 
-    if (
-      validateInputs(
-        nombre,
-        direccion,
-        email,
-        telefonoConsultas,
-        telefonoEmergencias
-      )
-    ) {
-      if (
-        validateCenter(nombre, email, telefonoConsultas, telefonoEmergencias)
-      ) {
+    //lo mismo que en add, vlido los campos antes que nada
+    if (validateInputs(nombre,direccion,email,telefonoConsultas,telefonoEmergencias)) {
+      if (validateCenter(nombre, email, telefonoConsultas, telefonoEmergencias)) {
         try {
           //a la url, tambien le paso el id para agarrar el centro que quiero
           const response = await fetch(`${API_URL}/${id}`, {
@@ -261,13 +219,10 @@ export const CentroProvider = ({ children }) => {
             // me agarro los centros previos
             //con map los recorro todos para aplicar modificacion (y creear nuevo array)
             //a map le paso la funcion => para que si el centro que tiene coincide el id con el editado, el nuevo array tiene centro actualizado, sino el centro que estaba
-            setCentros((prevCentros) =>
-              prevCentros.map((centro) =>
-                centro.id === id ? centroActualizado : centro
-              )
-            );
+            setCentros((prevCentros) => prevCentros.map((centro) => centro.id === id ? centroActualizado : centro));
             console.log("Centro editado correctamente:", centroActualizado);
             alert("Centro editado correctamente");
+            //no me olvido de cambiar el result
             result = true;
           } else {
             console.error("Error al editar el centro:", response.statusText);
@@ -284,7 +239,9 @@ export const CentroProvider = ({ children }) => {
     return result;
   };
 
-  const deleteCentro = async (id) => {
+  //funcion para eliminar el centro
+  const deleteCentro = async (centro) => {
+    const {id} = centro;
     let result = false;
 
     try {
@@ -293,9 +250,7 @@ export const CentroProvider = ({ children }) => {
       });
 
       if (response.ok) {
-        setCentros((prevCentros) =>
-          prevCentros.filter((centro) => centro.id !== id)
-        );
+        setCentros((prevCentros) => prevCentros.filter((centro) => centro.id !== id));
         result = true;
         alert("Centro eliminado correctamente");
       } else {
@@ -303,8 +258,8 @@ export const CentroProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error eliminando el centro:", error);
-      console.error("Error eliminando el centro");
     }
+    return result;
   };
 
   // Proveer el estado y las funciones a los componentes hijos
@@ -313,7 +268,6 @@ export const CentroProvider = ({ children }) => {
       value={{
         centros,
         addCentro,
-        validateInputs,
         editCentro,
         fetchCentros,
         deleteCentro,

@@ -27,7 +27,7 @@ export const TurnoProvider = ({ children }) => {
     
         fetchTurno();}
       }, [userData]);
-// Este metodo se encarga de gestionar el turno recive por parametro el ID del centro
+// Este metodo se encarga de gestionar el turno recibe por parametro el ID del centro
     const handleTurno = async(centro,fecha,hora) => {
         const canCreateTurno = await validarUser();  // Valida si el usuario ya tiene un turno activo
         if (canCreateTurno){

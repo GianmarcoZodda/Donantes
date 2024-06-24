@@ -37,7 +37,7 @@ const DetailsCentroScreen = () => {
     ]);
   };
 
- 
+ //edito el formato de las fechas para mejor legibilidad
   const formatDate = (date) => {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -55,18 +55,12 @@ const DetailsCentroScreen = () => {
     <View style={styles.container}>
       <Text style={styles.nombre}>{centro.nombre}</Text>
       <Text style={styles.info}>Dirección: {centro.direccion}</Text>
-      <Text style={styles.info}>
-        Teléfono Consultas: {centro.telefonoConsultas}
-      </Text>
-      <Text style={styles.info}>
-        Teléfono Urgencias: {centro.telefonoEmergencias}
-      </Text>
+      <Text style={styles.info}>Teléfono Consultas: {centro.telefonoConsultas}</Text>
+      <Text style={styles.info}>Teléfono Urgencias: {centro.telefonoEmergencias}</Text>
       <Text style={styles.info}>Email: {centro.email}</Text>
       <Text style={styles.horariosTitle}>Horarios:</Text>
       {centro.horarios.map((horario) => (
-        <Text key={horario.fecha} style={styles.horarios}>
-          {horario.fecha}: {horario.horas.join(", ")}
-        </Text>
+        <Text key={horario.fecha} style={styles.horarios}>{horario.fecha}: {horario.horas.join(", ")}</Text>
       ))}
 
       {userData.admin && (

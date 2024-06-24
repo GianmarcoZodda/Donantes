@@ -13,16 +13,10 @@ const AddCentroScreen = ({  }) => {
   const navigation = useNavigation()
 
   const handleAddCentro = async() => {
-    // valido que los parametros que me llegan no sean nulos. despues, el contexto se encarga de validar su formato y agregarlo a bd
+    //el metodo del context se encarga dee la logica, como validacion de los campos. 
+    //aca solo encierro todo en try catch para ver si el booleano que me devuelve es tru y salio todo ok
         try{
-            const nuevoCentro = {
-                nombre,
-                direccion,
-                telefonoConsultas,
-                telefonoEmergencias,
-                email,
-              };
-
+              const nuevoCentro = {nombre,direccion,telefonoConsultas,telefonoEmergencias,email};
               let result = await addCentro(nuevoCentro);
               if(result){
                 navigation.navigate('Home');
