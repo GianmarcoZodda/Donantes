@@ -4,6 +4,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import { CentroContext } from "../../context/CentroContext";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Centro from "../../components/Centro"
 
 
 const DetailsCentroScreen = () => {
@@ -53,15 +54,8 @@ const DetailsCentroScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.nombre}>{centro.nombre}</Text>
-      <Text style={styles.info}>Dirección: {centro.direccion}</Text>
-      <Text style={styles.info}>Teléfono Consultas: {centro.telefonoConsultas}</Text>
-      <Text style={styles.info}>Teléfono Urgencias: {centro.telefonoEmergencias}</Text>
-      <Text style={styles.info}>Email: {centro.email}</Text>
-      <Text style={styles.horariosTitle}>Horarios:</Text>
-      {centro.horarios.map((horario) => (
-        <Text key={horario.fecha} style={styles.horarios}>{horario.fecha}: {horario.horas.join(", ")}</Text>
-      ))}
+      
+      <Centro centro={centro} />
 
       {userData.admin && (
         <View>

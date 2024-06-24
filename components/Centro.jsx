@@ -9,6 +9,12 @@ const Centro = ({ centro }) => {
       <Text style={styles.info}>Teléfono Consultas: {centro.telefonoConsultas}</Text>
       <Text style={styles.info}>Teléfono Urgencias: {centro.telefonoEmergencias}</Text>
       <Text style={styles.info}>Email: {centro.email}</Text>
+      <Text style={styles.horariosTitle}>Horarios:</Text>
+      <View style={styles.horariosContainer}>
+        {centro.horarios.map((horario, index) => (
+          <Text key={index} style={styles.horarios}>{horario.fecha}: {horario.horas.join(", ")}</Text>
+        ))}
+      </View>
     </View>
   );
 };
@@ -33,6 +39,19 @@ const styles = StyleSheet.create({
   info: {
     fontSize: 16,
     marginBottom: 4,
+  },
+  horariosTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  horariosContainer: {
+    marginTop: 5,
+  },
+  horarios: {
+    fontSize: 14,
+    marginLeft: 10,
+    marginBottom: 5,
   },
 });
 
