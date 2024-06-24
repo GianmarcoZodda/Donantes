@@ -1,4 +1,5 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 // Crear el contexto
 export const CentroContext = createContext();
@@ -12,6 +13,7 @@ const API_URL =
 
 // Proveedor del contexto
 export const CentroProvider = ({ children }) => {
+  const { userData } = useContext(AuthContext);
   const [centros, setCentros] = useState([]);
 
   const fetchCentros = async () => {
@@ -130,6 +132,47 @@ export const CentroProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Error al eliminar el horario:', error);
+    }
+  };
+
+  // Agregar horario al centro
+  const agregarHorarioCentro = async (centroId, fecha, hora) => {
+    if (!userData.admin) {
+      console.error("Permiso denegado: No eres administrador");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/${centroId}`);
+      if (!response.ok) {
+        console.error(`Error al obtener el centro: ${response.status}`);
+        return;
+      }
+      const centro = await response.json();
+
+      let horarioIndex = centro.horarios.findIndex(h => h.fecha === fecha);
+      if (horarioIndex === -1) {
+        centro.horarios.push({ fecha: fecha, horas: [hora] });
+      } else {
+        centro.horarios[horarioIndex].horas.push(hora);
+      }
+
+      const updateResponse = await fetch(`${API_URL}/${centroId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(centro),
+      });
+
+      if (updateResponse.ok) {
+        console.log('El horario se agregó correctamente');
+        fetchCentros(); // Actualizar los centros para reflejar los cambios
+      } else {
+        console.error(`Error al actualizar el centro: ${updateResponse.status}`);
+      }
+    } catch (error) {
+      console.error('Error al agregar el horario:', error);
     }
   };
 
@@ -274,7 +317,8 @@ export const CentroProvider = ({ children }) => {
         editCentro,
         fetchCentros,
         deleteCentro,
-        eliminarHorario
+        eliminarHorario,
+        agregarHorarioCentro,
       }}
     >
       {children}
