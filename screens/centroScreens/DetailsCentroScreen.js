@@ -119,26 +119,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 2,
   },
-  nombre: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 8,
-    color: "#2c3e50",
-  },
-  info: {
-    fontSize: 16,
-    marginBottom: 6,
-    color: "#34495e",
-  },
-  horariosTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginTop: 5,
-  },
-  horarios: {
-    fontSize: 14,
-    marginLeft: 10,
-  },
   formContainer: {
     marginTop: 20,
   },
