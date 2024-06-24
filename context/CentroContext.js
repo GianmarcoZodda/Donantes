@@ -176,6 +176,42 @@ export const CentroProvider = ({ children }) => {
     }
   };
 
+  // Reagregar horario al centro
+  const reAgregarHorario = async (centroId, fecha, hora) => {
+    try {
+      const response = await fetch(`${API_URL}/${centroId}`);
+      if (!response.ok) {
+        console.error(`Error al obtener el centro: ${response.status}`);
+        return;
+      }
+      const centro = await response.json();
+
+      let horarioIndex = centro.horarios.findIndex(h => h.fecha === fecha);
+      if (horarioIndex === -1) {
+        centro.horarios.push({ fecha: fecha, horas: [hora] });
+      } else {
+        centro.horarios[horarioIndex].horas.push(hora);
+      }
+
+      const updateResponse = await fetch(`${API_URL}/${centroId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(centro),
+      });
+
+      if (updateResponse.ok) {
+        console.log('El horario se agregó correctamente');
+        fetchCentros(); // Actualizar los centros para reflejar los cambios
+      } else {
+        console.error(`Error al actualizar el centro: ${updateResponse.status}`);
+      }
+    } catch (error) {
+      console.error('Error al agregar el horario:', error);
+    }
+  };
+
   // Funciones de validación
 
   //valido que los params del centro no sean nulos
@@ -319,6 +355,7 @@ export const CentroProvider = ({ children }) => {
         deleteCentro,
         eliminarHorario,
         agregarHorarioCentro,
+        reAgregarHorario,
       }}
     >
       {children}
