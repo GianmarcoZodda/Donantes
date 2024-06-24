@@ -9,12 +9,18 @@ const Centro = ({ centro }) => {
       <Text style={styles.info}>Teléfono Consultas: {centro.telefonoConsultas}</Text>
       <Text style={styles.info}>Teléfono Urgencias: {centro.telefonoEmergencias}</Text>
       <Text style={styles.info}>Email: {centro.email}</Text>
-      <Text style={styles.horariosTitle}>Horarios:</Text>
-      <View style={styles.horariosContainer}>
-        {centro.horarios.map((horario, index) => (
-          <Text key={index} style={styles.horarios}>{horario.fecha}: {horario.horas.join(", ")}</Text>
-        ))}
-      </View>
+
+      {/* Validación para mostrar los horarios solo si centro.horarios está definido y no está vacío */}
+      {centro.horarios && centro.horarios.length > 0 && (
+        <>
+          <Text style={styles.horariosTitle}>Horarios:</Text>
+          {centro.horarios.map((horario) => (
+            <Text key={horario.fecha} style={styles.horarios}>
+              {horario.fecha}: {horario.horas.join(', ')}
+            </Text>
+          ))}
+        </>
+      )}
     </View>
   );
 };
@@ -32,26 +38,24 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   nombre: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 6,
+    marginBottom: 8,
+    color: '#2c3e50',
   },
   info: {
     fontSize: 16,
-    marginBottom: 4,
+    marginBottom: 6,
+    color: '#34495e',
   },
   horariosTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginTop: 10,
-  },
-  horariosContainer: {
     marginTop: 5,
   },
   horarios: {
     fontSize: 14,
     marginLeft: 10,
-    marginBottom: 5,
   },
 });
 
