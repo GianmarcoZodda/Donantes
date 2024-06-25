@@ -15,6 +15,7 @@ const API_URL ="https://665b5468003609eda4609543.mockapi.io/centros";
 
 // Proveedor del contexto
 export const CentroProvider = ({ children }) => {
+  const { userData } = useContext(AuthContext);
   const [centros, setCentros] = useState([]);
 
   const fetchCentros = async () => {
@@ -86,6 +87,10 @@ export const CentroProvider = ({ children }) => {
         console.error(`Error al obtener el centro: ${response.status}`);
         return;
       }
+
+      // Asegura que 'horarios' está inicializado por problemas
+      // de findIndex 'undefined'
+      centro.horarios = centro.horarios || [];
   
       // Encontrar el horario específico
       const horarioIndex = centro.horarios.findIndex(h => h.fecha === fecha);
@@ -129,7 +134,7 @@ export const CentroProvider = ({ children }) => {
 
   // Agregar horario al centro
   const agregarHorarioCentro = async (centroId, fecha, hora) => {
-    if (!userData.admin) {
+    if (!userData ||!userData.admin) {
       console.error("Permiso denegado: No eres administrador");
       return;
     }
@@ -140,6 +145,10 @@ export const CentroProvider = ({ children }) => {
         return;
       }
       const centro = await response.json();
+
+      // Asegura que 'horarios' está inicializado por problemas
+      // de findIndex 'undefined'
+      centro.horarios = centro.horarios || [];
 
       let horarioIndex = centro.horarios.findIndex(h => h.fecha === fecha);
       if (horarioIndex === -1) {
@@ -176,6 +185,10 @@ export const CentroProvider = ({ children }) => {
         return;
       }
       const centro = await response.json();
+
+      // Asegura que 'horarios' está inicializado por problemas
+      // de findIndex 'undefined'
+      centro.horarios = centro.horarios || [];
 
       let horarioIndex = centro.horarios.findIndex(h => h.fecha === fecha);
       if (horarioIndex === -1) {

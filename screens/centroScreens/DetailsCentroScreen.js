@@ -26,16 +26,21 @@ const DetailsCentroScreen = () => {
     navigation.navigate(viewname, { centro });
   };
 
-  const handleAgregarHorario = () => {
+  const handleAgregarHorario = async () => {
     const formattedFecha = formatDate(fecha);
     const formattedHora = formatTime(hora);
-    agregarHorarioCentro(centro.id, formattedFecha, formattedHora);
-    Alert.alert("Éxito", "Fecha agregada correctamente", [
-      {
-        text: "OK",
-        onPress: () => fetchCentros(), // Recargar los datos
-      },
-    ]);
+    try {
+      await agregarHorarioCentro(centro.id, formattedFecha, formattedHora);
+      Alert.alert("Éxito", "Fecha agregada correctamente", [
+        {
+          text: "OK",
+          onPress: () => fetchCentros().catch(error => console.error('Error al recargar los centros:', error)), // Recargar los datos
+        },
+      ]);
+    } catch (error) {
+      console.error('Error al agregar horario:', error);
+      Alert.alert("Error", "No se pudo agregar la fecha");
+    }
   };
 
  //edito el formato de las fechas para mejor legibilidad
@@ -52,6 +57,8 @@ const DetailsCentroScreen = () => {
     return `${hours}:${minutes}`;
   }; 
 
+
+  //Agrego userData a demas de la validacion de userData.admin para evitar que el código intente acceder a propiedades de undefined.
   return (
     <View style={styles.container}>
       
