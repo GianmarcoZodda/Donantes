@@ -33,7 +33,7 @@ const TurnoPickerComponent = ({ selectedDate, onDateChange }) => {
   return (
     <View>
       <TouchableOpacity onPress={showDatepicker} style={styles.button}>
-        <Text style={styles.buttonText}>Fecha de Nacimiento</Text>
+        <Text style={styles.buttonText}>Seleccionar fecha</Text>
       </TouchableOpacity>
       {show && (
         <DateTimePicker
