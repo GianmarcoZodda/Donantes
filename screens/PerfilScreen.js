@@ -31,7 +31,7 @@ export default function PerfilScreen({}) {
     try {
       const result = await updateUser(data);
       if (result) {
-        navigation.navigate("CentroStack", { screen: "IndexCentro" });
+        navigation.navigate("Donar");
       }
     } catch (error) {
       console.error("Error al actualizar usuario:", error);

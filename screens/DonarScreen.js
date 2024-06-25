@@ -29,6 +29,7 @@ const DonarScreen = () => {
 
     if (tieneDataCompleta) {
       handleTurno(selectedCentroId, selectedDia, selectedHora);
+      navigation.navigate("Home")
     } else {
       alert("Para donar por favor completa tus datos");
       navigation.navigate("Profile");
@@ -103,6 +104,7 @@ const DonarScreen = () => {
         <Text style={styles.agendarButtonText}>Agendar Turno</Text>
       </TouchableOpacity>
     </View>
+    
   );
 };
 
