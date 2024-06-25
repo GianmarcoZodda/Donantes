@@ -1,13 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View, Button, TextInput } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { CentroContext } from '../../context/CentroContext';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-const EditCentroScreeen = () => {
-
-    //de la ruta, agarro solo el centro (desestructuro lo que esta en params)
-    const route = useRoute();
-    const { centro } = route.params;
+const EditCentroScreen = () => {
+  const route = useRoute();
+  const { centro } = route.params;
 
   const [nombre, setNombre] = useState(centro.nombre);
   const [direccion, setDireccion] = useState(centro.direccion);
@@ -15,26 +13,29 @@ const EditCentroScreeen = () => {
   const [telefonoEmergencias, setTelefonoEmergencias] = useState(centro.telefonoEmergencias);
   const [email, setEmail] = useState(centro.email);
 
-  const navigation = useNavigation()
-
+  const navigation = useNavigation();
   const { editCentro } = useContext(CentroContext);
 
   const handleEditCentro = async () => {
-   
-      try {
-          const centroedit = {id: centro.id, nombre, direccion, telefonoConsultas, telefonoEmergencias, email };
+    try {
+      const centroEditado = {
+        id: centro.id,
+        nombre,
+        direccion,
+        telefonoConsultas,
+        telefonoEmergencias,
+        email,
+      };
 
-          let result = await editCentro(centroedit)
+      let result = await editCentro(centroEditado);
 
-          if(result){
-          navigation.navigate("Home");
-          }
-                    
-      } catch (error) {
-          console.error('Error: ', error);
+      if (result) {
+        navigation.navigate('Home');
       }
+    } catch (error) {
+      console.error('Error: ', error);
     }
-    
+  };
 
   return (
     <View style={styles.container}>
@@ -69,7 +70,9 @@ const EditCentroScreeen = () => {
         onChangeText={setEmail}
       />
 
-      <Button title="Confirmar Edición" onPress={handleEditCentro} />
+      <TouchableOpacity style={styles.loginButton} onPress={handleEditCentro}>
+        <Text style={styles.loginButtonText}>Confirmar Edición</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -80,15 +83,42 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
+    backgroundColor: '#f9f9f9',
   },
   input: {
-    height: 40,
+    height: 50,
     width: '100%',
     borderWidth: 1,
     borderColor: '#ccc',
-    marginBottom: 10,
+    marginBottom: 16,
     paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    fontSize: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  loginButton: {
+    backgroundColor: '#3498db',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  loginButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
 
-export default EditCentroScreeen;
+export default EditCentroScreen;

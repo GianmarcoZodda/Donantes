@@ -1,16 +1,15 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, Button, Alert } from "react-native";
+import {View,Text,StyleSheet,TouchableOpacity, Alert,} from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import { CentroContext } from "../../context/CentroContext";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import Centro from "../../components/Centro"
-
+import DateTimePicker from "@react-native-community/datetimepicker";
+import Centro from "../../components/Centro";
 
 const DetailsCentroScreen = () => {
   const navigation = useNavigation();
 
-  //de la ruta, agarro solo el centro (desestructuro lo que esta en params)
+  // De la ruta, agarro solo el centro (desestructuro lo que está en params)
   const route = useRoute();
   const { centro } = route.params;
   const { userData } = useContext(AuthContext);
@@ -27,107 +26,206 @@ const DetailsCentroScreen = () => {
   };
 
   const handleAgregarHorario = async () => {
-    const formattedFecha = formatDate(fecha);
-    const formattedHora = formatTime(hora);
     try {
+      const formattedFecha = formatDate(fecha);
+      const formattedHora = formatTime(hora);
       await agregarHorarioCentro(centro.id, formattedFecha, formattedHora);
       Alert.alert("Éxito", "Fecha agregada correctamente", [
         {
           text: "OK",
-          onPress: () => fetchCentros().catch(error => console.error('Error al recargar los centros:', error)), // Recargar los datos
+          onPress: () =>
+            fetchCentros().catch((error) =>
+              console.error("Error al recargar los centros:", error)
+            ), // Recargar los datos
         },
       ]);
     } catch (error) {
-      console.error('Error al agregar horario:', error);
+      console.error("Error al agregar horario:", error);
       Alert.alert("Error", "No se pudo agregar la fecha");
     }
   };
 
- //edito el formato de las fechas para mejor legibilidad
+  // Función para formatear la fecha como DD-MM-YYYY
   const formatDate = (date) => {
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
 
+  // Función para formatear la hora como HH:mm
   const formatTime = (time) => {
-    const hours = time.getHours().toString().padStart(2, '0');
-    const minutes = time.getMinutes().toString().padStart(2, '0');
+    const hours = time.getHours().toString().padStart(2, "0");
+    const minutes = time.getMinutes().toString().padStart(2, "0");
     return `${hours}:${minutes}`;
-  }; 
+  };
 
-
-  //Agrego userData a demas de la validacion de userData.admin para evitar que el código intente acceder a propiedades de undefined.
   return (
     <View style={styles.container}>
-      
       <Centro centro={centro} />
 
       {userData.admin && (
-        <View>
-        <Button
-          title="Editar Centro"
-          onPress={() => HandleNavigation("EditCentro", centro)}
-        />
-        <Button
-          title="Eliminar Centro"
-          onPress={() => HandleNavigation("DeleteCentro", centro)}
-        />
-        <View style={styles.formContainer}>
-          <Button onPress={() => setShowDatePicker(true)} title="Seleccionar Fecha Nueva" />
-          {showDatePicker && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={fecha}
-              mode="date"
-              display="default"
-              onChange={(event, selectedDate) => {
-                setShowDatePicker(false);
-                if (selectedDate) setFecha(selectedDate);
-              }}
-              minimumDate={new Date()}
-            />
-          )}
-          <Text>Fecha nueva seleccionada: {formatDate(fecha)}</Text>
-          
-          <Button onPress={() => setShowTimePicker(true)} title="Seleccionar Hora Nueva" />
-          {showTimePicker && (
-            <DateTimePicker
-              testID="timeTimePicker"
-              value={hora}
-              mode="time"
-              display="default"
-              onChange={(event, selectedTime) => {
-                setShowTimePicker(false);
-                if (selectedTime) setHora(selectedTime);
-              }}
-            />
-          )}
-          <Text>Hora nueva seleccionada: {formatTime(hora)}</Text>
-          
-          <Button title="Agregar Horario" onPress={handleAgregarHorario} />
+        <View style={styles.adminContainer}>
+          <TouchableOpacity
+            style={styles.adminButton}
+            onPress={() => HandleNavigation("EditCentro", centro)}
+          >
+            <Text style={styles.adminButtonText}>Editar Centro</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.adminButton}
+            onPress={() => HandleNavigation("DeleteCentro", centro)}
+          >
+            <Text style={styles.adminButtonText}>Eliminar Centro</Text>
+          </TouchableOpacity>
+
+          <View style={styles.formContainer}>
+            <View style={styles.pickerContainer}>
+              <TouchableOpacity
+                style={styles.datePickerButton}
+                onPress={() => setShowDatePicker(true)}
+              >
+                <Text style={styles.buttonText}>Seleccionar Fecha</Text>
+              </TouchableOpacity>
+              {showDatePicker && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={fecha}
+                  mode="date"
+                  display="default"
+                  onChange={(event, selectedDate) => {
+                    setShowDatePicker(false);
+                    if (selectedDate) setFecha(selectedDate);
+                  }}
+                  minimumDate={new Date()}
+                />
+              )}
+              <Text style={styles.selectionText}>
+                Fecha seleccionada: {formatDate(fecha)}
+              </Text>
+            </View>
+            <View style={styles.pickerContainer}>
+              <TouchableOpacity
+                style={styles.timePickerButton}
+                onPress={() => setShowTimePicker(true)}
+              >
+                <Text style={styles.buttonText}>Seleccionar Hora</Text>
+              </TouchableOpacity>
+              {showTimePicker && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={hora}
+                  mode="time"
+                  display="default"
+                  onChange={(event, selectedTime) => {
+                    setShowTimePicker(false);
+                    if (selectedTime) setHora(selectedTime);
+                  }}
+                />
+              )}
+              <Text style={styles.selectionText}>
+                Hora seleccionada: {formatTime(hora)}
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={handleAgregarHorario}
+              disabled={!fecha || !hora}
+            >
+              <Text style={styles.buttonText}>Agregar Horario</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    )}
-  </View>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "#fff",
-    borderRadius: 8,
     padding: 16,
-    marginBottom: 16,
+  },
+  adminContainer: {
+    marginTop: 20,
+  },
+  adminButton: {
+    backgroundColor: "#3498db",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     elevation: 3,
-    shadowOffset: { width: 1, height: 1 },
-    shadowColor: "#333",
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
+  },
+  adminButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
   formContainer: {
     marginTop: 20,
+  },
+  pickerContainer: {
+    marginBottom: 20,
+  },
+  pickerLabel: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  datePickerButton: {
+    backgroundColor: "#3498db",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  timePickerButton: {
+    backgroundColor: "#3498db",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  selectionText: {
+    marginTop: 10,
+    fontSize: 16,
+  },
+  addButton: {
+    backgroundColor: "#3498db",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
 });
 

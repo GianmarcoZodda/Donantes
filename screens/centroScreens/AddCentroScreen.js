@@ -1,32 +1,30 @@
-import { StyleSheet, View, Button, TextInput } from 'react-native';
-import React, { useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
+import { StyleSheet, View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { CentroContext } from '../../context/CentroContext';
 import { useNavigation } from '@react-navigation/native';
 
-const AddCentroScreen = ({  }) => {
+const AddCentroScreen = () => {
   const [nombre, setNombre] = useState('');
   const [direccion, setDireccion] = useState('');
   const [telefonoConsultas, setTelefonoConsultas] = useState('');
   const [telefonoEmergencias, setTelefonoEmergencias] = useState('');
   const [email, setEmail] = useState('');
   const { addCentro } = useContext(CentroContext);
-  const navigation = useNavigation()
-
-  const handleAddCentro = async() => {
-    //el metodo del context se encarga dee la logica, como validacion de los campos. 
-    //aca solo encierro todo en try catch para ver si el booleano que me devuelve es tru y salio todo ok
-        try{
-              const nuevoCentro = {nombre,direccion,telefonoConsultas,telefonoEmergencias,email};
-              let result = await addCentro(nuevoCentro);
-              if(result){
-                navigation.navigate('Home');
-              }
-        }
-        catch(error){
-            console.error(error)
-        }
-  };
+  const navigation = useNavigation();
   
+    // El método del contexto maneja la lógica, incluida la validación de los campos.
+    // Aquí solo envolvemos todo en try-catch para manejar errores y navegar a la pantalla principal si se agregó el centro correctamente.
+  const handleAddCentro = async () => {
+    try {
+      const nuevoCentro = { nombre, direccion, telefonoConsultas, telefonoEmergencias, email };
+      let result = await addCentro(nuevoCentro);
+      if (result) {
+        navigation.navigate('Home');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -60,7 +58,9 @@ const AddCentroScreen = ({  }) => {
         value={email}
         onChangeText={setEmail}
       />
-      <Button title="Agregar Centro" onPress={handleAddCentro} />
+      <TouchableOpacity style={styles.loginButton} onPress={handleAddCentro}>
+        <Text style={styles.loginButtonText}>Agregar Centro</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -71,14 +71,41 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
+    backgroundColor: '#f9f9f9',
   },
   input: {
-    height: 40,
+    height: 50,
     width: '100%',
     borderWidth: 1,
-    borderColor: '#ccc',
-    marginBottom: 10,
+    borderColor: '#ddd',
+    marginBottom: 16,
     paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    fontSize: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  loginButton: {
+    backgroundColor: '#3498db',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  loginButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
 

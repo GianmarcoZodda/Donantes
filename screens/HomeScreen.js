@@ -1,12 +1,11 @@
-import React,{useContext}from 'react';
-import { View, Text, Button, StyleSheet, FlatList } from 'react-native';
+import React, { useContext} from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity,  } from 'react-native';
 import { AuthContext } from '../context/AuthContext.js';
 import { Linking } from 'react-native';
 
 const HomeScreen = ({ navigation }) => {
-  const { status,logout } = useContext(AuthContext);
+  const { status, logout } = useContext(AuthContext);
   const isAuthenticated = status === "authenticated";
-    //creo un array de elementos. a algunos les agrego contenido (un titulo o parrafo) y los otros son para redirigir
 
   const data = [
     { key: '1', title: '¿Por qué donar sangre?', content: 'Donar sangre es un acto altruista que puede salvar muchas vidas. Cada donación puede ayudar hasta a tres personas en situaciones de emergencia, cirugías y tratamientos de enfermedades crónicas.' },
@@ -18,18 +17,13 @@ const HomeScreen = ({ navigation }) => {
     { key: '7', title: 'Ver Centros', action: () => navigation.navigate('CentroStack'), showIfAuthenticated: true },
     { key: '8', title: 'Mas Informacion', action: () => Linking.openURL('https://www.argentina.gob.ar/salud/donarsangre') },
     { key: '9', title: 'Cerrar Sesion ', action: () => logout(), showIfAuthenticated: true },
-    //{ key: '9', title: status }, 
   ];
 
-
-//a esta funcion le llega un item (elemento de data)
   const renderItem = ({ item }) => {
-    //si es diferente de undefined y diferente de autenticado, no lo muestra
     if (item.showIfAuthenticated !== undefined && item.showIfAuthenticated !== isAuthenticated) {
       return null;
     }
 
-    //si el item tiene contenido, lo muestra con los estilos para los titulos, parrafos etc
     if (item.content) {
       return (
         <View style={styles.section}>
@@ -37,30 +31,20 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.text}>{item.content}</Text>
         </View>
       );
-    } 
-    
-    //caso contrario crea un boton y  con onPress llama a la "action" de c/u (redireccion a la screen correspondiente)
-    else {
+    } else {
       return (
-        <View style={styles.buttonContainer}>
-          <Button
-            title={item.title}
-            onPress={item.action}
-            color="#841584"
-          />
-        </View>
+        <TouchableOpacity style={styles.button} onPress={item.action}>
+          <Text style={styles.buttonText}>{item.title}</Text>
+        </TouchableOpacity>
       );
     }
   };
 
-
-  //se retorna flatlist por la buena practica de no cargar todos los items, sino solo los que aparecen en pantalla
-  //ya que ahora tenemos pocos, pero en el futuro podemos agregar mas
   return (
     <FlatList
       style={styles.container}
       ListHeaderComponent={
-        <View style={styles.header}> 
+        <View style={styles.header}>
           <Text style={styles.title}>¡Dona Sangre, Salva Vidas!</Text>
         </View>
       }
@@ -71,45 +55,67 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
-//estilos generados con chatgpt (soy un queso con css)
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f9f9f9',
   },
   header: {
     alignItems: 'center',
     marginBottom: 20,
   },
-  logo: {
-    width: 100,
-    height: 100,
-    marginBottom: 10,
-  },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#d9534f',
+    color: '#e74c3c',
     textAlign: 'center',
   },
   section: {
-    marginBottom: 20,
+    backgroundColor: '#ffffff',
+    padding: 20,
+    marginVertical: 10,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   sectionTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginVertical: 10,
-    color: '#d9534f',
+    fontSize: 22,
+    fontWeight: '600',
+    marginBottom: 10,
+    color: '#333333',
   },
   text: {
     fontSize: 16,
-    marginBottom: 10,
-    color: '#555',
+    color: '#555555',
+    lineHeight: 24,
   },
-  buttonContainer: {
+  button: {
+    backgroundColor: '#3498db',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 10,
     marginVertical: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  buttonText: {
+    fontSize: 18,
+    color: '#ffffff',
+    fontWeight: '600',
   },
 });
 

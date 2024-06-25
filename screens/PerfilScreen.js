@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { UserContext } from "../context/UserContext";
 import UserProfile from "../components/UserProfile";
-import { View, StyleSheet, Text, Button } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import ModalProfileUpdate from "../components/ModalProfileUpdate";
 import { useNavigation } from "@react-navigation/native";
 import { TurnoContext } from "../context/TurnoContext";
@@ -16,6 +16,7 @@ export default function PerfilScreen({}) {
   const { buscarCentro } = useContext(CentroContext);
   const [centro, setCentro] = useState(null);
   const navigation = useNavigation();
+
   useEffect(() => {
     const traerCentro = async () => {
       if (turno && turno.centroId) {
@@ -26,38 +27,53 @@ export default function PerfilScreen({}) {
     traerCentro();
   }, [turno, buscarCentro]);
 
-  //Enviamos los datos del modal al userContext para que maneje la logica y validaciones
   const handleSave = async (data) => {
     try {
-      //await para esperar que se actualice
       const result = await updateUser(data);
-      // si tiene los datos completos, redirijo al index de los centros
       if (result) {
         navigation.navigate("CentroStack", { screen: "IndexCentro" });
       }
     } catch (error) {
       console.error("Error al actualizar usuario:", error);
-      // Manejar el error si updateUser falla
     }
   };
+
+  // Función para verificar si todos los campos están llenos
+  const allFieldsFilled = () => {
+    return (
+      userData.address &&
+      userData.phone &&
+      userData.birthDate &&
+      userData.bloodType
+    );
+  };
+
   return (
     <View style={styles.container}>
+      <Text style={styles.h1}>Datos</Text>
       <UserProfile userData={userData} />
-      <Text style={styles.tamanio}>Direccion: {userData.address || ""}</Text>
-      <Text style={styles.tamanio}>Celular: {userData.phone || ""}</Text>
-      <Text style={styles.tamanio}>
+      <Text style={styles.infoText}>Dirección: {userData.address || ""}</Text>
+      <Text style={styles.infoText}>Celular: {userData.phone || ""}</Text>
+      <Text style={styles.infoText}>
         Fecha de nacimiento: {userData.birthDate || ""}
       </Text>
-      <Text style={styles.tamanio}>
+      <Text style={styles.infoText}>
         Tipo de sangre: {userData.bloodType || ""}
       </Text>
-      <Button title="Agregar datos" onPress={() => setModalVisible(true)} />
+      {/* Cambio dinámico del texto del botón */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.buttonText}>
+          {allFieldsFilled() ? "Editar datos" : "Agregar datos"}
+        </Text>
+      </TouchableOpacity>
       <ModalProfileUpdate
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         onSave={handleSave}
       />
-
       {turno ? (
         <View style={styles.turnoContainer}>
           <Text style={styles.turnoTitle}>Tu próximo turno</Text>
@@ -66,18 +82,20 @@ export default function PerfilScreen({}) {
               <Text style={styles.turnoInfo}>Centro: {centro.nombre}</Text>
               <Text style={styles.turnoInfo}>Fecha: {turno.fecha}</Text>
               <Text style={styles.turnoInfo}>Hora: {turno.hora}</Text>
-              <Button
-                title="Cancelar Turno"
+              <TouchableOpacity
+                style={[styles.button, styles.cancelButton]}
                 onPress={() => cancelarTurno(turno.id)}
-              />
+              >
+                <Text style={styles.buttonText}>Cancelar Turno</Text>
+              </TouchableOpacity>
             </>
           ) : (
-            <Text style={styles.turnoInfo}>Cargando centro...</Text>
+            <Text style={styles.turnoInfo}>Cargando turno...</Text>
           )}
         </View>
       ) : (
         <View style={styles.noTurnoContainer}>
-          <Text style={styles.noTurnoText}>Sin Proximo Turno</Text>
+          <Text style={styles.noTurnoText}>Sin Próximo Turno</Text>
         </View>
       )}
     </View>
@@ -96,8 +114,32 @@ const styles = StyleSheet.create({
     elevation: 5,
     margin: 20,
   },
-  tamanio: {
-    fontSize: 20,
+  infoText: {
+    fontSize: 18,
+    color: "#333",
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: "#3498db",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  cancelButton: {
+    backgroundColor: "#e74c3c",
+    marginTop: 10,
   },
   turnoContainer: {
     marginTop: 20,
@@ -133,5 +175,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#555",
+  },
+  h1: {
+    fontSize: 24,
+    fontWeight: "bold",
+    paddingBottom: 10,
   },
 });

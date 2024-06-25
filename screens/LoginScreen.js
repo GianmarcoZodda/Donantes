@@ -1,12 +1,12 @@
-import React, { useState,useContext,} from 'react';
-import { View, Text, TextInput, TouchableOpacity , StyleSheet } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
-import CustomPasswordButton from '../components/CustomPasswordButton'
+import CustomPasswordButton from '../components/CustomPasswordButton';
 
-  const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { status,login } = useContext(AuthContext);
+  const { status, login } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
 
   const passwordState = () => {
@@ -14,10 +14,10 @@ import CustomPasswordButton from '../components/CustomPasswordButton'
   };
 
   const handleLogin = () => {
-    if(status == 'authenticated'){
-      alert("Ya esta autenticado")
-    }else{
-      if(login(email,password)){
+    if (status == 'authenticated') {
+      alert("Ya está autenticado");
+    } else {
+      if (login(email, password)) {
         navigation.navigate('Home');
       }
     }
@@ -31,6 +31,8 @@ import CustomPasswordButton from '../components/CustomPasswordButton'
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
       <View style={styles.passwordContainer}>
         <TextInput
@@ -38,7 +40,8 @@ import CustomPasswordButton from '../components/CustomPasswordButton'
           placeholder="Contraseña"
           value={password}
           onChangeText={setPassword}
-          secureTextEntry={!showPassword} // Oculta la contraseña si showPassword es false
+          secureTextEntry={!showPassword}
+          autoCapitalize="none"
         />
         <CustomPasswordButton visible={showPassword} onPress={passwordState} />
       </View>
@@ -54,42 +57,74 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
+    backgroundColor: '#f9f9f9',
   },
   title: {
-    fontSize: 24,
-    marginBottom: 16,
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#e74c3c',
     textAlign: 'center',
+    marginBottom: 24,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
+    height: 50,
+    borderColor: '#ddd',
     borderWidth: 1,
-    marginBottom: 12,
-    padding: 8,
-    borderRadius: 4,
+    marginBottom: 16,
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    fontSize: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: 'gray',
+    borderColor: '#ddd',
     borderWidth: 1,
-    marginBottom: 12,
-    borderRadius: 4,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    marginBottom: 24,
+    paddingHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   passwordInput: {
     flex: 1,
-    height: 40,
-    padding: 8,
+    height: 50,
+    fontSize: 16,
   },
   loginButton: {
-    backgroundColor: 'blue',
-    padding: 12,
-    borderRadius: 4,
+    backgroundColor: '#3498db',
+    paddingVertical: 15,
+    borderRadius: 8,
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   loginButtonText: {
-    color: 'white',
-    fontSize: 16,
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
 

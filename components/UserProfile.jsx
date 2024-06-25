@@ -13,7 +13,9 @@ const UserProfile = ({ userData }) => {
 
 const styles = StyleSheet.create({
   tamanio:{
-    fontSize: 20,  
+    fontSize: 18,
+    color: "#333",
+    marginBottom: 10,
   }
 })
 
