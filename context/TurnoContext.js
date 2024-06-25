@@ -26,8 +26,8 @@ export const TurnoProvider = ({ children }) => {
         };
     
         fetchTurno();}
-      }, [userData]);
-// Este metodo se encarga de gestionar el turno recibe por parametro el ID del centro
+      }, [userData,]);
+// Este metodo se encarga de gestionar el turno recive por parametro el ID del centro
     const handleTurno = async(centro,fecha,hora) => {
         const canCreateTurno = await validarUser();  // Valida si el usuario ya tiene un turno activo
         if (canCreateTurno){
@@ -38,7 +38,7 @@ export const TurnoProvider = ({ children }) => {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        centroId: centro.id,
+                        centroId: centro,
                         usuarioId: userData.id,
                         fecha: fecha,
                         hora: hora,
@@ -47,7 +47,7 @@ export const TurnoProvider = ({ children }) => {
     
                 if (response.ok) {
                     alert("Turno cargado correctamente")
-                    eliminarHorario(centro.id,fecha,hora)
+                    eliminarHorario(centro,fecha,hora)
                     const newTurno = await response.json();
                     setTurno(newTurno);
                 }
@@ -73,8 +73,6 @@ export const TurnoProvider = ({ children }) => {
                 reAgregarHorario(turno.centroId, turno.fecha, turno.hora); 
               }
             setTurno(null);
-          } else {
-            console.error("Error al cancelar el turno.");
           }
         } catch (error) {
           console.error("Error al cancelar el turno:", error);

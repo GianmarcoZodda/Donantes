@@ -30,6 +30,7 @@ const DonarScreen = () => {
         const tieneDataCompleta = (userData.birthDate != null) && (userData.bloodType != null);
 
         if(tieneDataCompleta){
+          console.log("id",selectedCentroId)
             handleTurno(selectedCentroId,selectedDia,selectedHora)
         }
 
