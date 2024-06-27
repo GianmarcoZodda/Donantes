@@ -18,8 +18,8 @@ const IndexCentroScreen = () => {
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate("DetailsCentro", { centro: item })}>
       <View style={styles.row}>
-        <Text style={styles.cell}>{item.direccion}</Text>
         <Text style={styles.cell}>{item.nombre}</Text>
+        <Text style={styles.cell}>{item.direccion}</Text>
       </View>
     </TouchableOpacity>
   );
