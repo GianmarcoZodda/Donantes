@@ -13,7 +13,7 @@ const DeleteCentroScreen = () => {
 
   const handleDelete = async () => {
     try {
-      let result = await deleteCentro(centro.id);
+      let result = await deleteCentro(centro);
       if (result) {
         navigation.navigate('Home');
       }   

@@ -25,7 +25,7 @@ const AddCentroScreen = () => {
       console.error(error);
     }
   };
-
+  
   return (
     <View style={styles.container}>
       <TextInput
