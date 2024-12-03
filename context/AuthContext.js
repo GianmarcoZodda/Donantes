@@ -155,16 +155,20 @@ export const AuthProvider = ({ children }) => {
 
   // Función para hacer la validación biométrica
   const authenticateBiometric = async () => {
+
+    // Verifica si el dispositivo soporta autenticación biométrica
     const compatible = await LocalAuthentication.hasHardwareAsync();
     if (!compatible) {
       showSnackbar(COMPATIBILIDAD_ERROR, "error");
     }
 
+    // se encarga de verificar si hay datos biométricos registrados en el dispositivo
     const enrolled = await LocalAuthentication.isEnrolledAsync();
     if (!enrolled) {
       showSnackbar(HUELLA_NOT_FOUND, "warning");
     }
 
+    // Autenticación biométrica
     const result = await LocalAuthentication.authenticateAsync({
       promptMessage: "Autenticar",
     });
